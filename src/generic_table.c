@@ -87,9 +87,11 @@ int table_remove_at(int index, table_t tab) {
     assert(p_val_index != NULL);
 
     for (int i = tab->actual_size; i>index; i--) {
-        p_data[i] = p_data[i-1];
+        p_data[i-1] = p_data[i];
     }
 
-    tab->actual_size++;
-    
+    p_data[tab->actual_size];
+    tab->actual_size--;
+
+    return 1;   
 }
