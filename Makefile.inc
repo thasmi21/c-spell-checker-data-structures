@@ -1,0 +1,1 @@
+CFLAGS+=-Wall -Wextra -Werror=implicit -Werror=uninitialized -Wno-unused-parameter -Iinclude 

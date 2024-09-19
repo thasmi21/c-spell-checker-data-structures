@@ -1,4 +1,4 @@
-PROGRAMS=test
+PROGRAMS= main
 
 # Un/comment the following two lines to use/disable sanitizers (UBSan, LSan & ASan):
 #CFLAGS=-fno-omit-frame-pointer -fno-common -fsanitize=undefined,leak,address -fsanitize-recover=all
@@ -135,4 +135,4 @@ deep-clean : clean
 	find . -name "*~" -delete
 	find . -name "._*" -delete
 	$(RM) .gdb_history
-
+		
