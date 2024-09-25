@@ -126,6 +126,10 @@ link_t link_delete(link_t link, void* (*delete)(void*)) {
 
     assert(delete != NULL);
 
+    if (link == NULL) {
+        return NULL;
+    }
+
     while(!link_is_empty(link)) {
         link = link_del_first(link , delete);
     }

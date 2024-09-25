@@ -99,8 +99,8 @@ int test_list_new() {
     assert(list->print_data != NULL);
     assert(list->equal_data != NULL);
 
-    //list = list_delete(list);
-    //assert(list == NULL);
+    list = list_delete(list);
+    assert(list == NULL);
 
     fprintf(stderr, "=> Test passed with success\n");
     return 1;
@@ -153,6 +153,9 @@ int test_list_add_first() {
     assert(list->data->data == p_char);
     assert(list->data->next->data == p_char2);
  
+    list = list_delete(list);
+    assert(list == NULL);
+
     fprintf(stderr, "=> Test passed with success\n");
     return 1; 
 
@@ -204,6 +207,10 @@ int test_list_add_last() {
     assert(list->size == 2);
     assert(list->data->data == p_char2);
     assert(list->data->next->data == p_char);
+
+    list = list_delete(list);
+    assert(list == NULL);
+
  
     fprintf(stderr, "=> Test passed with success\n");
     return 1; 
@@ -259,6 +266,10 @@ int test_list_del_first() {
     assert(list->size == 0);
     assert(list->data == NULL);
 
+    list = list_delete(list);
+    assert(list == NULL);
+
+
     fprintf(stderr, "=> Test passed with success\n");
     return 1;
 }
@@ -286,6 +297,10 @@ int test_list_del_last() {
     assert(list->data == NULL);
 
     fprintf(stderr, "=> Test passed with success\n");
+
+    list = list_delete(list);
+    assert(list == NULL);
+
     return 1;
 }
 
@@ -336,13 +351,24 @@ int test_list_length() {
 
 int test_list_printf() {
 
-    fprintf(stderr, "\n## Test of the lis_length function\n");
+    fprintf(stderr, "\n## Test of the list_length function\n");
 
     fprintf(stderr, "<= Test : We try a NULL in length\n");
 
     assert(list_length(NULL) == -1);
 
-    list_t list = list_crea_list();
+    list_t list = list_new((void (*)(void *))print_char, 
+    (void (*))delete_char, 
+    (int (*)(void *, void *))equal_char);
+    assert(list != NULL);
+
+    list_printf(list);
+
+
+    list = list_delete(list);
+    assert(list == NULL);
+
+    list = list_crea_list();
     assert(list != NULL);
 
     list_printf(list);
@@ -353,20 +379,105 @@ int test_list_printf() {
     return 1;
 }
 
+int test_list_find() {
+
+    fprintf(stderr, "\n## Test of the list_find function\n");
+
+    char* p_char = create_char('a');
+    assert(p_char != NULL);
+    
+    char* p_char2 = create_char('b');
+    assert(p_char2 != NULL);
+
+    link_t link = list_find(NULL, p_char);
+    assert(link == NULL);
+
+    list_t list = list_crea_list();
+    assert(list != NULL);
+
+    link = list_find(list, NULL);
+    assert(link == NULL);
+
+    link = list_find(list, p_char);
+    assert(link != NULL);
+
+    char a1 = *(char *)(link->data);
+    char a2 = *(p_char);
+
+    assert(a1 == a2);
+
+    link = list_find(list, p_char2);
+    char b1 = *(char *)(link->data);
+    char b2 = *(p_char2);
+
+    assert(b1 == b2);
+
+    list = list_delete(list);
+    assert(list == NULL);
+    delete_char(p_char);
+    delete_char(p_char2);
+
+    fprintf(stderr, "=> Test passed with success\n");
+    return 1;
+}
+
+int test_list_lookup() {
+
+    fprintf(stderr, "\n## Test of the list_lookup function\n");
+
+    char* p_char = create_char('a');
+    assert(p_char != NULL);
+    
+    char* p_char2 = create_char('b');
+    assert(p_char2 != NULL);
+
+    link_t link = list_lookup(NULL, p_char, (int (*)(void *, void *))equal_char2);
+    assert(link == NULL);
+
+    list_t list = list_crea_list();
+    assert(list != NULL);
+
+    link = list_lookup(list, NULL, (int (*)(void *, void *))equal_char2);
+    assert(link == NULL);
+
+    link = list_lookup(list, p_char, NULL);
+    assert(link == NULL);
+
+    link = list_lookup(list, p_char, (int (*)(void *, void *))equal_char2);
+    char a1 = *(char *)(link->data);
+    char a2 = *(p_char);
+
+    assert(a1 == a2);
+
+    link = list_lookup(list, p_char2, (int (*)(void *, void *))equal_char2);
+    char b1 = *(char *)(link->data);
+    char b2 = *(p_char2);
+
+    assert(b1 == b2);
+
+    list = list_delete(list);
+    assert(list == NULL);
+
+    delete_char(p_char);
+    delete_char(p_char2);
+
+    fprintf(stderr, "=> Test passed with success\n");
+    return 1;
+}
+
 int main() {
     test_list_new();
     test_list_add_first();
     test_list_add_last();
     test_list_is_empty();
-    test_list_del_first();
     test_list_del_last();
+    test_list_del_first();
     test_list_delete();
     test_list_length();
     test_list_printf();
-
-
+    test_list_find();
+    //test_list_lookup();
 
     fprintf(stderr, "Tests of file 04_list.c pass with success\n");
     return EXIT_SUCCESS;
 }
-

@@ -92,16 +92,18 @@ list_t list_add_first(list_t list, void* e) {
 
     if (e == NULL) {
         printf("Error in list.c/list_add_first: e == NULL\n");
-        list_delete(list);
-        return NULL;
+        list = list_delete(list);
+        assert(list == NULL);
+        return list;
     }
 
     list->data = link_add_first(list->data, e);
 
     if (list->data == NULL) {
         printf("Error in list.c/list_add_first: link_add_first failed\n");
-        list_delete(list);
-        return NULL;
+        list = list_delete(list);
+        assert(list == NULL);
+        return list;
     }
 
     list->size++;
@@ -201,7 +203,6 @@ list_t list_delete(list_t list) {
 
     list->data = link_delete(list->data, list->delete_data);
     assert(list->data == NULL);
-
     free(list);
     return NULL;
 }
@@ -210,21 +211,25 @@ list_t list_add_last(list_t list, void* e) {
 
     if (list == NULL) {
         printf("Error in list.c/list_add_last: list is NULL\n");
-        return NULL;
+        list = list_delete(list);
+        assert(list == NULL);
+        return list;
     }
 
     if (e == NULL) {
         printf("Error in list.c/list_add_last: e is NULL\n");
-        list_delete(list);
-        return NULL;
+        list = list_delete(list);
+        assert(list == NULL);
+        return list;
     }
 
     list->data = link_add_last(list->data, e);
 
     if (list->data == NULL) {
         printf("Error in list.c/list_add_last: link_add_last failed\n");
-        list_delete(list);
-        return NULL;
+        list = list_delete(list);
+        assert(list == NULL);
+        return list;
     }
 
     list->size++;
@@ -267,6 +272,11 @@ link_t list_lookup(list_t list, void* elem, int(*compare)(void* e1, void* e2)) {
         return NULL;
     }
 
+    if (compare == NULL) {
+        printf("Error in list.c/list_lookup: compare is NULL\n");
+        return NULL;
+    }
+
     if (list->data == NULL) {
         return NULL;
     }
@@ -294,12 +304,12 @@ link_t list_lookup(list_t list, void* elem, int(*compare)(void* e1, void* e2)) {
 link_t list_find(list_t list, void* elem) {
 
     if (elem == NULL) {
-        printf("Error in list.c/list_lookup: elem is NULL\n");
+        printf("Error in list.c/list_find: elem is NULL\n");
         return NULL;
     }
 
     if (list == NULL) {
-        printf("Error in list.c/list_lookup: list is NULL\n");
+        printf("Error in list.c/list_find: list is NULL\n");
         return NULL;
     }
 
