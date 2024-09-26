@@ -5,7 +5,7 @@
 #include "../include/vector.h"
 #include "../include/generic_table.h"
 
-vect_t vect_new(size_t n,void (*print_data)(void*,FILE*), void* (*delete_data)(void*),int (*equal_data)(void*,void*)) {
+vect_t vect_new(size_t n,void (*print_data)(void*), void* (*delete_data)(void*),int (*equal_data)(void*,void*)) {
 
     vect_t vec;
     vec = (vect_t)table_new(n, print_data, delete_data, equal_data);

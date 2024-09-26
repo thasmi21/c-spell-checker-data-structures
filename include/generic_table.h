@@ -33,7 +33,7 @@ typedef struct {
     void** data;
     size_t max_size;
     size_t actual_size;
-    void (*print_data)(void*, FILE*);
+    void (*print_data)(void*);
     void* (*delete_data)(void*);
     int (*equal_data)(void*, void*);
 } *table_t;
@@ -52,7 +52,7 @@ typedef struct {
  *  - A new table_t structure on success.
  *  - NULL if an error occurs (invalid parameters or memory allocation failure).
  */
-table_t table_new(size_t n, void (*print_data)(void*, FILE*), void* (*delete_data)(void*), int (*equal_data)(void*, void*));
+table_t table_new(size_t n, void (*print_data)(void*), void* (*delete_data)(void*), int (*equal_data)(void*, void*));
 
 /*
  * Deletes the table and frees all allocated memory. It also calls the delete_data 
@@ -123,5 +123,7 @@ int table_insert_at(void* val, size_t index, table_t tab);
  *  - An error code (-1 to -7) if the operation fails (invalid parameters or memory constraints).
  */
 int table_remove_at(size_t index, table_t tab);
+
+int table_modify(table_t table, size_t index, void* val);
 
 #endif

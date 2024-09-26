@@ -1,16 +1,10 @@
-#ifndef HASH_TABLE
-#define HASH_TABLE
+#ifndef HASH_T
+#define HASH_T
 // Inclusion des listes génériques
-#include "../include/vector.h"
+#include "vector.h"
+#include "cell.h"
 ///////// Les maillons des listes génériques contiennent des pointeurs vers des triplets clés, valeurs, hashcode.
 ///////// Le hashcode n'est utile que pour l'optimisation du redimensionnement
-typedef struct {
-
-  void* key;
-  void* data;
-  size_t hashcode;
-
-} * cell_t;
 
 ///////// Le type des tables d'association
 typedef struct {
@@ -24,15 +18,12 @@ typedef struct {
   void* (*delete_key)(void*);
   void* (*delete_data)(void*);
   int (*compare_key)(void* e1, void* e2);
-  void (*print_key)(void*,FILE*);
-  void (*print_data)(void*,FILE*);
+  void (*print_key)(void*);
+  void (*print_data)(void*);
 
 }* hash_t;
 
-hash_t hash_new(size_t n, int (*hachage)(void * ),
-  void* (*delete_key)(void*),void* (*delete_data)(void*),
-  int (*compare_key)(void* e1, void* e2),
-  void (*print_key)(void*,FILE*),void (*print_data)(void*,FILE*));
+hash_t hash_new(size_t n, int (*hachage)(void * ),void* (*delete_key)(void*),void* (*delete_data)(void*),int (*compare_key)(void* e1, void* e2),void (*print_key)(void*),void (*print_data)(void*));
 
 hash_t hash_delete(hash_t table);
 

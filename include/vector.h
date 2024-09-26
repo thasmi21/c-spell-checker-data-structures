@@ -19,7 +19,7 @@ typedef table_t vect_t;
  * 
  * @return A pointer to the newly created vector, or NULL if memory allocation fails or invalid parameters.
  */
-vect_t vect_new(size_t n, void (*print_data)(void*, FILE*), void* (*delete_data)(void*), int (*equal_data)(void*, void*));
+vect_t vect_new(size_t n, void (*print_data)(void*), void* (*delete_data)(void*), int (*equal_data)(void*, void*));
 
 /**
  * vect_append - Adds a new element to the vector.

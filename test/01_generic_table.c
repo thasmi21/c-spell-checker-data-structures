@@ -4,7 +4,7 @@
 
 #include "../include/generic_table.h"
 
-void print_double(double* d, FILE* fp) {
+void print_double(double* d) {
 
     printf("%f", *d);
 }
@@ -33,26 +33,26 @@ int test_table_new() {
     
 
     table_t tab;
-    tab = table_new(0, (void (*)(void*, FILE*))print_double, (void* (*)(void*))delete_double, (int (*)(void*, void*))equal_double);
+    tab = table_new(0, (void (*)(void*))print_double, (void* (*)(void*))delete_double, (int (*)(void*, void*))equal_double);
 
     assert(tab == NULL);
 
-    tab = table_new(5, (void (*)(void *, FILE *))NULL, 
+    tab = table_new(5, (void (*)(void *))NULL, 
                    (void (*))delete_double, 
                    (int (*)(void *, void *))equal_double);
     assert(tab == NULL);
 
-    tab = table_new(4, (void (*)(void *, FILE *))print_double, 
+    tab = table_new(4, (void (*)(void *))print_double, 
                    (void (*))NULL, 
                    (int (*)(void *, void *))equal_double);
     assert(tab == NULL);
 
-    tab = table_new(4, (void (*)(void *, FILE *))print_double, 
+    tab = table_new(4, (void (*)(void *))print_double, 
                    (void (*))delete_double, 
                    (int (*)(void *, void *))NULL);
     assert(tab == NULL);
 
-    tab = table_new(10, (void (*)(void *, FILE *))print_double, 
+    tab = table_new(10, (void (*)(void *))print_double, 
                    (void (*))delete_double, 
                    (int (*)(void *, void *))equal_double);
 
@@ -78,7 +78,7 @@ int test_table_append() {
     fprintf(stderr, "<= Test : We try to append a new element to a table and test its parameters\n");
     
     table_t tab;
-    tab = table_new(2, (void (*)(void *, FILE *))print_double, 
+    tab = table_new(2, (void (*)(void *))print_double, 
                    (void (*))delete_double, 
                    (int (*)(void *, void *))equal_double);
 
@@ -140,7 +140,7 @@ int test_table_insert_at() {
     fprintf(stderr, "<= Test : We try to insert a new element to a table and test its parameters\n");
     
     table_t tab;
-    tab = table_new(10, (void (*)(void *, FILE *))print_double, 
+    tab = table_new(10, (void (*)(void *))print_double, 
                    (void (*))delete_double, 
                    (int (*)(void *, void *))equal_double);
 
@@ -190,7 +190,7 @@ int test_remove_at() {
     fprintf(stderr, "<= Test : We try to remove elements of a table and test its parameters\n");
     
     table_t tab;
-    tab = table_new(10, (void (*)(void *, FILE *))print_double, 
+    tab = table_new(10, (void (*)(void *))print_double, 
                    (void (*))delete_double, 
                    (int (*)(void *, void *))equal_double);
 
@@ -256,7 +256,7 @@ int test_table_printf() {
     fprintf(stderr, "<= Test : We try to print elements of a table with 3 elements of value 2, 3, 4.4\n");
 
     table_t tab;
-    tab = table_new(10, (void (*)(void *, FILE *))print_double, 
+    tab = table_new(10, (void (*)(void *))print_double, 
                    (void (*))delete_double, 
                    (int (*)(void *, void *))equal_double);
 
@@ -293,4 +293,4 @@ int main() {
 
     fprintf(stderr, "Tests of file 01_generic_table.c passed with success\n");
     return EXIT_SUCCESS;
-}
+}   

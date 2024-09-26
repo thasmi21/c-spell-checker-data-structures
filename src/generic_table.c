@@ -4,7 +4,7 @@
 
 #include "../include/generic_table.h"
 
-table_t table_new(size_t n, void (*print_data)(void*, FILE*), void* (*delete_data)(void*), int (*equal_data)(void*, void*)) {
+table_t table_new(size_t n, void (*print_data)(void*), void* (*delete_data)(void*), int (*equal_data)(void*, void*)) {
 
     if (n == 0) {
         printf("Error in generic_table.c/table_new: n must be > 0\n");
@@ -230,7 +230,7 @@ void table_printf(table_t tab) {
             size_t actual_size = tab->actual_size;
             for (size_t i = 0; i<actual_size; i++) {
                 printf("Tab[%zu] = ", i);
-                tab->print_data(p_data[i], NULL);
+                tab->print_data(p_data[i]);
                 printf("\t");     
             }
             printf("}\n");
