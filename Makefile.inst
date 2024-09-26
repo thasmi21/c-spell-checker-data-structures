@@ -1,0 +1,35 @@
+asan-install :
+	@if [ -z "${ASAN_OPTIONS}" ] ; then echo "export ASAN_OPTIONS=$(ASAN_RUNTIME)" >> ~/.bash_aliases ; echo "export UBSAN_OPTIONS=$(ASAN_CONT_ON_ERROR)" >> ~/.bash_aliases ; echo "\n\e[7m\e[32mASan runtime environment updated.\e[m\n\n Now either type 'source ~/.bashrc' and press Enter, or logout and get a new terminal.\n" ; fi ;
+
+my-env-stylish : # Does not require sudo for install
+	@if [ ! -z "${GDB_STYLISH}" ] ; then echo '\n  Your GDB is already beautiful ;)\n' ; exit 1 ; fi ;
+	@mkdir -p ~/.gdbinit.d
+	@echo '$(ASAN_GDB)\nset print pretty on\n' >> ~/.gdbinit.d/init
+	@echo "\e[7m\e[33m Installing GDB Dashboard \e[m"
+	@mkdir -p ~/.gdb/dashboard
+	@wget --quiet https://git.io/.gdbinit -P ~/.gdb/dashboard
+	@echo "\e[7m\e[33m Installing Pygments \e[m"
+	@pip install pygments # Should be there already
+	@echo 'source ~/.gdb/dashboard/.gdbinit' >> ~/.gdbinit
+	@echo 'dashboard -style discard_scrollback False' >> ~/.gdbinit
+	@echo 'alias g = dashboard' >> ~/.gdbinit
+	@echo 'define hookpost-up\n\tdashboard\nend\ndefine hookpost-down\n\tdashboard\nend' >> ~/.gdbinit
+	@echo "\e[7m\e[33m Installing GDB Enhanced Features (GEF) \e[m"
+	@mkdir -p ~/.gdb/gef
+	@git clone https://github.com/hugsy/gef.git ~/.gdb/gef
+	@echo 'source ~/.gdb/gef/gef.py' >> ~/.gdbinit
+	@echo 'gef config context.enable False' >> ~/.gdbinit
+	@echo 'export GDB_STYLISH=1' >> ~/.bash_aliases
+	@echo "\e[7m\e[32m Your GDB has been pimped, enjoy! \e[m\n\n Now either type 'source ~/.bashrc' and press Enter, or logout and get a new terminal."
+	@make -s asan-install
+
+my-box-stylish :
+	@echo "\e[7m\e[33m Updating apt (requires sudo) \e[m"
+	@sudo apt update
+	@echo "\e[7m\e[33m Installing C-related tools (requires sudo) \e[m"
+	@sudo apt install -y python3-pip clang gdb make binutils git libubsan1 libasan5 gcc valgrind # gcc and valgrind could be left out
+	@if ! command -v code ; then echo "\e[7m\e[33m Installing VS Code (requires sudo) \e[m" ; wget --quiet --show-progress https://go.microsoft.com/fwlink/?LinkID=760868 -O code.deb ; sudo dpkg -i code.deb && rm -f code.deb ; fi ;
+	@echo "\e[7m\e[33m Installing VS Code stuff for C dev \e[m"
+	@code --install-extension ms-vscode.cpptools-extension-pack
+	@code --install-extension ms-vscode.hexeditor
+	@make -s -f Makefile.inst my-env-stylish

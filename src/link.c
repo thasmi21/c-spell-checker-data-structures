@@ -122,7 +122,7 @@ link_t link_del_last(link_t link , void* (*delete)(void*)) {
     return link;
 }
 
-link_t link_delete(link_t link, void* (*delete)(void*)) {
+link_t link_delete_not_safe(link_t link, void* (*delete)(void*)) {
 
     assert(delete != NULL);
 
@@ -137,3 +137,28 @@ link_t link_delete(link_t link, void* (*delete)(void*)) {
     return NULL;
 }
 
+link_t link_delete(link_t link, void* (*delete)(void*)) {
+
+    assert(delete != NULL);
+
+    if (link == NULL) {
+        return NULL;
+    }
+
+    while(!link_is_empty(link)) {
+
+        void* p_data = (void*)link->data;
+        link_t p_link = link->next;
+        while (p_link != NULL) {
+            if (p_link->data == p_data) {
+                p_link->data = NULL;
+            }
+            p_link = p_link->next;
+
+        }
+        link = link_del_first(link , delete);
+
+    }
+
+    return NULL;
+}

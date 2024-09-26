@@ -61,6 +61,7 @@
     "string_view": "c",
     "generic_tab.h": "c",
     "random": "c",
-    "string": "c"
+    "string": "c",
+    "vector.h": "c"
   }
 }

@@ -7,7 +7,7 @@
 table_t table_new(size_t n, void (*print_data)(void*, FILE*), void* (*delete_data)(void*), int (*equal_data)(void*, void*)) {
 
     if (n == 0) {
-        printf("Error in generic_table.c/table_new: n must be >0\n");
+        printf("Error in generic_table.c/table_new: n must be > 0\n");
         return NULL;
     }
 

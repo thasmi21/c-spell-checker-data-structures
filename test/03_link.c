@@ -282,7 +282,7 @@ int main() {
     test_link_del_last();
     test_link_delete();
     test_list_is_empty();
-    fprintf(stderr, "Tests of file 03_link.c pass with success\n");
+    fprintf(stderr, "Tests of file 03_link.c passed with success\n");
     return EXIT_SUCCESS;
 }
 

@@ -402,6 +402,6 @@ int main() {
     test_vect_lookup();
     test_remove_at();
 
-    fprintf(stderr, "Tests of file 02_vector.c pass with success\n");
+    fprintf(stderr, "Tests of file 02_vector.c passed with success\n");
     return EXIT_SUCCESS;
 }

@@ -11,7 +11,9 @@ void print_char(char* c) {
 
 char* delete_char(char* c) {
 
-    assert(c != NULL);
+    if (c == NULL) {
+        return NULL;
+    }
     free(c);
  
     c = NULL;
@@ -476,8 +478,8 @@ int main() {
     test_list_length();
     test_list_printf();
     test_list_find();
-    //test_list_lookup();
+    test_list_lookup();
 
-    fprintf(stderr, "Tests of file 04_list.c pass with success\n");
+    fprintf(stderr, "Tests of file 04_list.c passed with success\n");
     return EXIT_SUCCESS;
 }

@@ -1,0 +1,10 @@
+*.o
+*.perf
+*.exe
+a.out
+*.zip
+*.wav
+.DS_Store
+*~
+._*
+work_in_progress/

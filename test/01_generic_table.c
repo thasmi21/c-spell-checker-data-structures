@@ -291,6 +291,6 @@ int main() {
     test_remove_at();
     test_table_printf();
 
-    fprintf(stderr, "Tests of file 01_generic_table.c pass with success\n");
+    fprintf(stderr, "Tests of file 01_generic_table.c passed with success\n");
     return EXIT_SUCCESS;
 }
