@@ -22,7 +22,9 @@ char* delete_char(char* c) {
 
 int equal_char(char* c1, char* c2) {
 
-    assert(c1 != NULL && c2 != NULL);
+    assert(c1 != NULL);
+    assert(c2 != NULL);
+
     return (*c1 == *c2);
 }
 
@@ -427,12 +429,15 @@ int test_list_lookup() {
 
     fprintf(stderr, "\n## Test of the list_lookup function\n");
 
+    fprintf(stderr, "<= Test : We try  NULL parameters, must return errors\n");
+
     char* p_char = create_char('a');
     assert(p_char != NULL);
     
     char* p_char2 = create_char('b');
     assert(p_char2 != NULL);
-
+    
+    
     link_t link = list_lookup(NULL, p_char, (int (*)(void *, void *))equal_char2);
     assert(link == NULL);
 
@@ -444,6 +449,10 @@ int test_list_lookup() {
 
     link = list_lookup(list, p_char, NULL);
     assert(link == NULL);
+
+    fprintf(stderr, "=> Test passed with success\n");
+
+    fprintf(stderr, "<= Test : We try  valids parameters, must not return errors\n");
 
     link = list_lookup(list, p_char, (int (*)(void *, void *))equal_char2);
     char a1 = *(char *)(link->data);
@@ -467,6 +476,67 @@ int test_list_lookup() {
     return 1;
 }
 
+int test_list_link_remove() {
+
+    fprintf(stderr, "\n## Test of the list_link_remove function\n");
+
+    fprintf(stderr, "<= Test : We try  NULL parameters, must return errors\n");
+
+    link_t link = link_new();
+    list_t test_list = list_link_remove(NULL, link);
+    assert(test_list == NULL);
+
+    list_t list = list_new((void (*)(void *))print_char, 
+    (void (*))delete_char, 
+    (int (*)(void *, void *))equal_char);
+    assert(list != NULL);
+    
+    char* a = create_char('a');
+    assert(a != NULL);
+    char* b = create_char('b');
+    assert(b != NULL);
+
+    list = list_add_first(list, b);
+    assert(list != NULL);
+    list = list_add_first(list, a);
+    assert(list != NULL);
+    
+    list = list_link_remove(list, NULL);
+    assert(list != NULL);
+
+    fprintf(stderr, "=> Test passed with success\n");
+
+    fprintf(stderr, "<= Test : We try  valids parameters, must not return errors\n");
+
+    assert(list->data != NULL);
+    link = list->data;
+
+    list = list_link_remove(list, link);
+
+    assert(list != NULL);
+    assert(list->size == 1);
+    assert(list->data != NULL);
+    char b_val = *(char *)(list->data->data);
+
+    assert(b_val == 'b'); 
+    assert(list->size == 1);
+
+    link = list->data;
+    
+    list = list_link_remove(list, link);
+
+    assert(list != NULL);
+    assert(list->size == 0);
+    assert(list->data == NULL);
+
+    list = list_delete(list);
+    assert(list == NULL);
+
+    fprintf(stderr, "=> Test passed with success\n");
+    return 1;
+}
+
+
 int main() {
     test_list_new();
     test_list_add_first();
@@ -479,6 +549,7 @@ int main() {
     test_list_printf();
     test_list_find();
     test_list_lookup();
+    test_list_link_remove();
 
     fprintf(stderr, "Tests of file 04_list.c passed with success\n");
     return EXIT_SUCCESS;

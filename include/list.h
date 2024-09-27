@@ -58,4 +58,6 @@ link_t list_find(list_t list, void* elem);
 // Suppression de l'element elem, au sens de equal_data
 list_t list_remove(list_t list, void* elem);
 
+list_t list_link_remove(list_t list, link_t link);
+
 #endif

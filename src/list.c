@@ -33,6 +33,7 @@ list_t list_new(void (*print_data)(void*),void* (*delete_data)(void*), int (*equ
     list->print_data = print_data;
     list->delete_data = delete_data;
     list->equal_data = equal_data;
+    list->data = NULL;
 
     return list;
 }
@@ -318,9 +319,14 @@ link_t list_find(list_t list, void* elem) {
     }
 
     link_t p_data = list->data;
-    
+
+
+    if (list->equal_data == NULL) {
+        printf("Error in list.c/list_find: list->equal_data == NULL\n");
+        return NULL;
+    }
     while (!link_is_empty(p_data)) {
-        
+
         int rst = list->equal_data(p_data->data, elem);
 
         if (rst == 1) {
@@ -328,7 +334,7 @@ link_t list_find(list_t list, void* elem) {
         }
         
         if (rst < 0) {
-            printf("Error in list.c/list_lookup: compare rst is NULL\n");
+            printf("Error in list.c/list_find: compare rst is NULL\n");
             return NULL;
         }
         p_data = p_data->next;
@@ -340,12 +346,12 @@ link_t list_find(list_t list, void* elem) {
 list_t list_remove(list_t list, void* elem) {
 
     if (elem == NULL) {
-        printf("Error in list.c/list_lookup: elem is NULL\n");
+        printf("Error in list.c/list_remove: elem is NULL\n");
         return NULL;
     }
 
     if (list == NULL) {
-        printf("Error in list.c/list_lookup: list is NULL\n");
+        printf("Error in list.c/list_remove: list is NULL\n");
         return NULL;
     }
 
@@ -356,11 +362,65 @@ list_t list_remove(list_t list, void* elem) {
     link_t link = list_find(list, elem);
 
     if (link == NULL) {
-        printf("Error in list.c/list_lookup: Element not found or list_find failed\n");
+        printf("Error in list.c/list_remove: Element not found or list_find failed\n");
         return NULL;
     }
 
     link = link_del_first(link , list->delete_data);
     list->size--;
     return list;
+}
+
+list_t list_link_remove(list_t list, link_t link) {
+
+    if (link == NULL) {
+        printf("Error in list.c/list_link_remove: link is NULL\n");
+        return list;
+    }
+
+    if (list == NULL) {
+        printf("Error in list.c/list_link_remove: list is NULL\n");
+        return NULL;
+    }
+
+    if (list->data == NULL) {
+        printf("Void list\n");
+        return NULL;
+    }
+
+
+    link = list_find(list, link->data);
+
+    if (link == NULL) {
+        printf("Error in list.c/list_link_remove: Element not found or list_find failed\n");
+        return list;
+    }
+
+    if (list->delete_data == NULL) {
+        printf("Error in list.c/list_link_remove: list->delete_data = NULL\n");
+        return list;
+    }
+
+    link_t p_link = list->data;
+    if (p_link == link) {
+        list->data = link_del_first(list->data , list->delete_data);
+
+        list->size--;
+        return list;
+    }
+    
+    link_t link_preview = NULL;
+    while (p_link->next != NULL && link_preview == NULL) {
+
+        if (p_link->next == link) {
+            link_preview = p_link;
+        }
+        assert(p_link->next != NULL);
+        p_link->next = p_link;
+    }
+    
+    p_link->next = link_del_first(p_link->next , list->delete_data);
+    list->size--;
+    return list;
+
 }
