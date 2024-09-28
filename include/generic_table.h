@@ -124,6 +124,6 @@ int table_insert_at(void* val, size_t index, table_t tab);
  */
 int table_remove_at(size_t index, table_t tab);
 
-//IF you want size to make sense dont use it , TO TEST
+//IF you want size to make sense dont use it
 int table_initialize_i(table_t tab, size_t index, void* val);
 #endif

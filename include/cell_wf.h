@@ -19,6 +19,10 @@ cell_wf_t cell_wf_new(void* key, void* data, size_t hashcode, void (*print_data)
     void (*print_key)(void*), void* (*delete_data)(void*),void*(*delete_key)(void*),
     int(*compare_data)(void*, void*), int (*compare_key)(void*, void*));
 
+cell_wf_t cell_wf_new2(cell_t cell, void (*print_data)(void*),
+    void (*print_key)(void*), void* (*delete_data)(void*),void*(*delete_key)(void*),
+    int(*compare_data)(void*, void*), int (*compare_key)(void*, void*));
+
 void cell_wf_print(cell_wf_t cell_wf);
 
 cell_wf_t cell_wf_delete(cell_wf_t cell_wf);

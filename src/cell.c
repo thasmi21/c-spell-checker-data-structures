@@ -52,6 +52,29 @@ void cell_print(cell_t cell, void (*print_data)(void*), void (*print_key)(void*)
     }
 }
 
+void cell_print_for_wf(cell_t cell, void (*print_data)(void*), void (*print_key)(void*)) {
+
+    if (cell == NULL) {
+        printf("Error in cell.c/cell_print: cell is NULL\n");
+    }
+
+    else if (print_data == NULL) {
+        printf("Error in cell.c/cell_print: print_data is NULL\n");
+    }
+
+    else if (print_key == NULL) {
+        printf("Error in cell.c/cell_print: print_key is NULL\n");
+    }
+
+    else {
+        printf("Cell {");
+        print_key(cell->key);
+        printf(", ");
+        print_data(cell->data);
+        printf(", hashcode = %zu }", cell->hashcode);
+    }
+}
+
 cell_t cell_delete(cell_t cell, void* (*delete_data)(void*), void*(*delete_key)(void*)) {
 
     if (cell == NULL) {
@@ -75,7 +98,7 @@ cell_t cell_delete(cell_t cell, void* (*delete_data)(void*), void*(*delete_key)(
 
     assert(cell->data == NULL);
 
-    cell->key = delete_data(cell->key);
+    cell->key = delete_key(cell->key);
     assert(cell->key == NULL);
 
     free(cell); 

@@ -284,6 +284,41 @@ int test_table_printf() {
     return 1;
 }
 
+int test_table_initialize_i() {
+
+    fprintf(stderr, "\n## Test of the table_initialize_i function\n");
+
+    fprintf(stderr, "<= Test : We try valid parameters, must return not errors\n");
+
+    table_t tab;
+    tab = table_new(5, (void (*)(void *))print_double, 
+                   (void (*))delete_double, 
+                   (int (*)(void *, void *))equal_double);
+
+
+    table_printf(tab);
+
+    double* p3;
+    p3 = malloc(sizeof(double));
+    *p3 = 78;
+    table_append(p3, tab);
+
+    table_initialize_i(tab, 3, p3);
+
+    assert(tab != NULL);
+    assert(tab->data != NULL);
+
+    double d =  *(double*)((tab->data)[3]);
+    assert(d == 78);
+    table_printf(tab);
+
+    tab = table_delete(tab);
+    assert(tab == NULL);
+
+    fprintf(stderr, "=> Test passed with success\n");
+    return 1;
+}
+
 int main() {
     test_table_new();
     test_table_append();

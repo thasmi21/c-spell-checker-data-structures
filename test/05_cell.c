@@ -5,17 +5,6 @@
 
 #include "../include/cell.h"
 
-size_t hash_string(const char* str) {
-    unsigned long hash = 5381;
-    int c;
-
-    while ((c = *str++)) {
-        hash = ((hash << 5) + hash) + c;  // hash * 33 + c
-    }
-
-    return hash;
-}
-
 void print_str(char* s) {
     printf("str = %s", s);
 }
@@ -82,6 +71,17 @@ int compare_int_key(int* key1, int* key2) {
     return (*key1 == *key2); 
 }
 
+size_t hash_string(char* str) {
+    unsigned long hash = 5381;
+    int c;
+
+    while ((c = *str++)) {
+        hash = ((hash << 5) + hash) + c;  // hash * 33 + c
+    }
+
+    return hash;
+}
+
 cell_t cell_maker() {
     int* p_key = malloc(sizeof(int));
     *p_key = 1;
@@ -102,6 +102,8 @@ cell_t cell_maker() {
 
     return cell;
 }
+
+
 
 int test_cell_new() {
 
@@ -253,7 +255,7 @@ int test_cell_compare() {
 
 int test_cell_compare_key() {
 
-    fprintf(stderr, "\n## Test of the cell_compare function\n");
+    fprintf(stderr, "\n## Test of the cell_compare_key function\n");
 
     cell_t cell1 = cell_maker();
     assert(cell1 != NULL);
@@ -308,3 +310,5 @@ int main() {
     fprintf(stderr, "Tests of file 05_cell.c passed with success\n");
     return EXIT_SUCCESS;
 }
+
+//#define ERROR_MSG(msg) printf("Error in %s: %s\n", __func__, msg)
