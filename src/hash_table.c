@@ -281,3 +281,6 @@ void hash_print(hash_t table) {
     vect_printf(table->data);
     printf("}\n");
 }
+
+//int hash_new_length(int sens, hash_t table) {
+//}

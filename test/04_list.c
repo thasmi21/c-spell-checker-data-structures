@@ -554,3 +554,4 @@ int main() {
     fprintf(stderr, "Tests of file 04_list.c passed with success\n");
     return EXIT_SUCCESS;
 }
+

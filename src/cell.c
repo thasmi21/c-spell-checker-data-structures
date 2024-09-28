@@ -6,20 +6,27 @@
 
 cell_t cell_new(void* key, void* data, size_t hashcode) {
 
-    cell_t p_cell;
-    p_cell = malloc(sizeof(*p_cell));
+    if (key == NULL) {
+        return NULL;
+    }
 
-    if (p_cell == NULL) {
+    if (data == NULL) {
+        return NULL;
+    }
+
+    cell_t cell;
+    cell = malloc(sizeof(*cell));
+
+    if (cell == NULL) {
         printf("Error in cell.c/cell_new: malloc cell failed\n");
         return NULL;
     }
 
-    p_cell->key = key;
-    p_cell->data = data;
-    p_cell->hashcode = hashcode;
+    cell->key = key;
+    cell->data = data;
+    cell->hashcode = hashcode;
 
-
-    return p_cell;
+    return cell;
 }
 
 void cell_print(cell_t cell, void (*print_data)(void*), void (*print_key)(void*)) {
@@ -37,9 +44,9 @@ void cell_print(cell_t cell, void (*print_data)(void*), void (*print_key)(void*)
     }
 
     else {
-        printf("Cell { key = ");
+        printf("Cell {");
         print_key(cell->key);
-        printf(", data = ");
+        printf(", ");
         print_data(cell->data);
         printf(", hashcode = %zu }\n", cell->hashcode);
     }
@@ -53,24 +60,26 @@ cell_t cell_delete(cell_t cell, void* (*delete_data)(void*), void*(*delete_key)(
 
     if (delete_data == NULL) {
         printf("Error in cell.c/cell_print: delete_data is NULL\n");
-        return NULL;
+        return cell;
     }
 
 
     if (delete_key == NULL) {
         printf("Error in cell.c/cell_print: delete_key is NULL\n");
-        return NULL;
+        return cell;
     }
 
-    else {
-        cell->data = delete_data(cell->data);
-        assert(cell->data == NULL);
-        cell->key = delete_data(cell->key);
-        assert(cell->key == NULL);
-    }
+    assert(cell->data != NULL);
 
+    cell->data = delete_data(cell->data);
+
+    assert(cell->data == NULL);
+
+    cell->key = delete_data(cell->key);
+    assert(cell->key == NULL);
+
+    free(cell); 
     return NULL;
-
 }
 
 int cell_compare(cell_t cell1, cell_t cell2, int(*compare_data)(void*, void*), int (*compare_key)(void*, void*)) {
@@ -94,6 +103,7 @@ int cell_compare(cell_t cell1, cell_t cell2, int(*compare_data)(void*, void*), i
         printf("Error in cell.c/compare_cell: compare_key is NULL\n");
         return -4;
     }
+
 
     int rst1 = compare_data(cell1->data, cell2->data);
     if (rst1 < 0) {
@@ -142,4 +152,3 @@ int cell_compare_key(cell_t cell1, cell_t cell2, int (*compare_key)(void*, void*
     }
     return 0;
 }
-

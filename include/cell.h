@@ -10,7 +10,7 @@ typedef struct {
   size_t hashcode;
 
 } * cell_t;
-
+  
 cell_t cell_new(void* key, void* data, size_t hashcode);
 
 void cell_print(cell_t cell, void (*print_data)(void*), void (*print_key)(void*));
