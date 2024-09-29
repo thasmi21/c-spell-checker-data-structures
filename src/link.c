@@ -79,8 +79,12 @@ link_t link_del_first(link_t link , void* (*delete)(void*)) {
         return NULL;
     }
 
+
     link_t new_first = link->next;
 
+    if (link->data == NULL) {
+        printf("Link data is NULL\n");
+    }
     link->data = delete(link->data);
     assert(link->data == NULL);
     free(link);

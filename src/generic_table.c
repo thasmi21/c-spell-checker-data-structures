@@ -4,7 +4,7 @@
 
 #include "../include/generic_table.h"
 
-table_t table_new(size_t n, void (*print_data)(void*, FILE*), void* (*delete_data)(void*), int (*equal_data)(void*, void*)) {
+table_t table_new(size_t n, void (*print_data)(void*), void* (*delete_data)(void*), int (*equal_data)(void*, void*)) {
 
     if (n == 0) {
         printf("Error in generic_table.c/table_new: n must be > 0\n");
@@ -212,30 +212,40 @@ void table_printf(table_t tab) {
 
     if (tab == NULL) {
         printf("\nNothing to print, tab is NULL\n");
+        return;
 
     }
-    else if (tab->print_data == NULL) {
+    
+    if (tab->print_data == NULL) {
         printf("Error in generic_table.c/table_printf: Print_data is NULL, while tab is not MAJOR BUG\n");
+        return;
     }
-    else {
-        void** p_data = tab->data;
-        assert(p_data != NULL);
+    
+    void** p_data = tab->data;
 
-        if (p_data == NULL) {
-            printf("\nError in generic_table.c/table_printf: Tab is not NULL but tab->data is NULL, MAJOR BUG\n");
-        }
-        else {
-            printf("Tab->max_size = %zu, tab->actual_size = %zu \t", tab->max_size, tab->actual_size);
-            printf("\nTab->data = {");
-            size_t actual_size = tab->actual_size;
-            for (size_t i = 0; i<actual_size; i++) {
-                printf("Tab[%zu] = ", i);
-                tab->print_data(p_data[i], NULL);
-                printf("\t");     
-            }
-            printf("}\n");
-        }
+    if (p_data == NULL) {
+        printf("\nError in generic_table.c/table_printf: Tab is not NULL but tab->data is NULL, MAJOR BUG\n");
+        return;
     }
+    
+    printf("Table_data = { ");
+    printf("Tab->max_size = %zu, tab->actual_size = %zu \t", tab->max_size, tab->actual_size);
+    printf("\nTab->data = [\n");
+    size_t max_size = tab->max_size;
+    for (size_t i = 0; i<max_size; i++) {
+
+        printf("Tab[%zu] = (", i);
+
+        if (p_data[i] == NULL) {
+                printf("NULL");
+            }
+        else {
+            tab->print_data(p_data[i]);
+        }
+        printf(")\n");     
+    }
+    printf("] ");
+    printf("}\n");
 }
 
 table_t table_delete(table_t tab) {
@@ -244,24 +254,28 @@ table_t table_delete(table_t tab) {
     void** p_data = tab->data;
     assert(p_data != NULL);
 
-    size_t actual_size = tab->actual_size;
-    assert(actual_size <= tab->max_size);
+    size_t max_size = tab->max_size;
 
     if (tab->delete_data == NULL) {
-        printf("Error in generic_table.c/table_delete: Print_data is NULL, while tab is not MAJOR BUG\n");
+        printf("Error in generic_table.c/table_delete: delete_data is NULL, while tab is not MAJOR BUG\n");
         exit(EXIT_FAILURE);
     }
 
-    for (size_t i = 0; i<actual_size; i++) {
+
+    for (size_t i = 0; i<max_size; i++) {
+
         if (p_data[i] != NULL) {
-            for (size_t j = i+1; j<actual_size; j++) {
+            for (size_t j = i+1; j<max_size; j++) {
                 if (p_data[i] == p_data[j]) {
                     p_data[j] = NULL;
                 }
             }
+
             assert(p_data[i] != NULL);
             assert(tab != NULL);
+
             assert(tab->data != NULL);
+
             p_data[i] = tab->delete_data(p_data[i]);
         }
         assert(p_data[i] == NULL);
@@ -269,4 +283,91 @@ table_t table_delete(table_t tab) {
     free(tab->data);
     free(tab);
     return NULL;
+}
+
+int table_initialize_i(table_t tab, size_t index, void* val) {
+
+    if (tab == NULL) {
+        printf("Error in generic_table.c/table_initialize_i: tab = NULL\n");
+        return -1;
+    }
+
+    if (val == NULL) {
+        printf("Error in generic_table.c/table_initialize_i: val = NULL\n");
+        return -2;
+    }
+
+    if (tab->max_size <= index) {
+        printf("Error in generic_table.c/table_initialize_i: tab->max_size <= index\n");
+        return -3;
+    }
+
+    if (tab->data == NULL) {
+        printf("Error in generic_table.c/table_initialize_i: tab = NULL\n");
+        return -4;
+    }
+
+    if ((tab->data)[index] != NULL) {
+        printf("Error in generic_table.c/table_initialize_i: (tab->data)[index] != NULL, initialisize must only be used on non-initialised val\n");
+        return -5;
+    }
+
+    (tab->data)[index] = val;
+    return 1; 
+}
+
+int table_is_equal(table_t tab1, table_t tab2) {
+
+    if (tab1 == NULL) {
+        printf("Error in generic_table.c/table_is_equal: tab1 = NULL\n");
+        return -1;
+    }
+
+    if (tab2 == NULL) {
+        printf("Error in generic_table.c/table_is_equal: tab2 = NULL\n");
+        return -2;
+    }
+
+    if (tab1->data == NULL) {
+        printf("Error in generic_table.c/table_is_equal: tab1->data = NULL\n");
+        return -3;
+    }    
+    
+    if (tab2->data == NULL) {
+        printf("Error in generic_table.c/table_is_equal: tab2->data = NULL\n");
+        return -4;
+    }
+
+    if (tab1->actual_size != tab2->actual_size) {
+        return 0;
+    }
+
+    size_t size = tab1->max_size;
+    void** data1 = tab1->data;
+    void** data2 = tab2->data;
+
+    if (tab1->equal_data == NULL) {
+        printf("Error in generic_table.c/table_is_equal: tab1->equal_data = NULL\n");
+        return -4;
+    }
+
+    int (*equal_data)(void *, void *) = tab1->equal_data;
+    for (size_t i = 0; i < size; i++) {
+
+        void* p_data1 = data1[i];
+        void* p_data2 = data2[i];
+
+        if (p_data1 == NULL || p_data2 == NULL) {
+            if (!(p_data1 == NULL && p_data2 == NULL)) {
+                return 0;
+            }
+        }
+        else {
+            int rst = equal_data(data1[i], data2[i]);
+            if (rst != 1) {
+                return 0;
+            }
+        }
+    }
+    return 1;
 }

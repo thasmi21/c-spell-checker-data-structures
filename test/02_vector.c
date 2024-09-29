@@ -4,7 +4,7 @@
 
 #include "../include/vector.h"
 
-void print_char(char* c, FILE* fp) {
+void print_char(char* c) {
 
     printf("%c", *c);
 }
@@ -43,28 +43,28 @@ int test_vect_new() {
     
 
     vect_t vec;
-    vec = vect_new(0, (void (*)(void *, FILE *))print_char, 
+    vec = vect_new(0, (void (*)(void *))print_char, 
                    (void (*))delete_char, 
                    (int (*)(void *, void *))equal_char);
     
     assert(vec == NULL);
 
-    vec = vect_new(5, (void (*)(void *, FILE *))NULL, 
+    vec = vect_new(5, (void (*)(void *))NULL, 
                    (void (*))delete_char, 
                    (int (*)(void *, void *))equal_char);
     assert(vec == NULL);
 
-    vec = vect_new(4, (void (*)(void *, FILE *))print_char, 
+    vec = vect_new(4, (void (*)(void *))print_char, 
                    (void (*))NULL, 
                    (int (*)(void *, void *))equal_char);
     assert(vec == NULL);
 
-    vec = vect_new(4, (void (*)(void *, FILE *))print_char, 
+    vec = vect_new(4, (void (*)(void *))print_char, 
                    (void (*))delete_char, 
                    (int (*)(void *, void *))NULL);
     assert(vec == NULL);
 
-    vec = vect_new(10, (void (*)(void *, FILE *))print_char, 
+    vec = vect_new(10, (void (*)(void *))print_char, 
                    (void (*))delete_char, 
                    (int (*)(void *, void *))equal_char);
 
@@ -90,7 +90,7 @@ int test_vect_append() {
     fprintf(stderr, "<= Test : We try to append a new element to a vect and test its parameters\n");
     
     vect_t vec;
-    vec = vect_new(2, (void (*)(void *, FILE *))print_char, 
+    vec = vect_new(2, (void (*)(void *))print_char, 
                    (void (*))delete_char, 
                    (int (*)(void *, void *))equal_char);
 
@@ -144,7 +144,7 @@ int test_vect_append2() {
     fprintf(stderr, "<= Test : We try to append a new element to a vect and test its parameters\n");
     
     vect_t vec;
-    vec = vect_new(1, (void (*)(void *, FILE *))print_char, 
+    vec = vect_new(1, (void (*)(void *))print_char, 
                    (void (*))delete_char, 
                    (int (*)(void *, void *))equal_char);
 
@@ -201,7 +201,7 @@ int test_vect_printf() {
     fprintf(stderr, "<= Test : We try to append printf a vect\n");
 
     vect_t vec;
-    vec = vect_new(2, (void (*)(void *, FILE *))print_char, 
+    vec = vect_new(2, (void (*)(void *))print_char, 
                    (void (*))delete_char, 
                    (int (*)(void *, void *))equal_char);
 
@@ -236,7 +236,7 @@ int test_vect_find() {
     fprintf(stderr, "<= Test : We try to append find some char in the vect\n");
 
     vect_t vec;
-    vec = vect_new(2, (void (*)(void *, FILE *))print_char, 
+    vec = vect_new(2, (void (*)(void *))print_char, 
                    (void (*))delete_char, 
                    (int (*)(void *, void *))equal_char);
 
@@ -262,7 +262,9 @@ int test_vect_find() {
     assert(p3 != NULL);
     *p3 = 'a';
 
-    assert(vect_find(p3, vec) == 0 && "a not found in place 0");
+    vect_printf(vec);
+    rst = vect_find(p3, vec);
+    assert(rst == 0 && "a not found in place 0");
 
     *p3 = 'c';
     assert(vect_find(p3, vec) == 2 && "c not found in place 2");
@@ -270,6 +272,7 @@ int test_vect_find() {
     *p3 = 'd';
     assert(vect_find(p3, vec) == -1 && "d is not in in but found in");
     free(p3);
+
     vec = vect_delete(vec);
     fprintf(stderr, "=> Test passed with success\n");
 
@@ -283,7 +286,7 @@ int test_vect_lookup() {
     fprintf(stderr, "<= Test : We try to find char using a different equal to\n");
 
     vect_t vec;
-    vec = vect_new(2, (void (*)(void *, FILE *))print_char, 
+    vec = vect_new(2, (void (*)(void *))print_char, 
                    (void (*))delete_char, 
                    (int (*)(void *, void *))equal_char);
 
@@ -331,7 +334,7 @@ int test_remove_at() {
     fprintf(stderr, "<= Test : We try to remove elements of a vect and test its parameters\n");
     
     vect_t vec;
-    vec = vect_new(10, (void (*)(void *, FILE *))print_char, 
+    vec = vect_new(10, (void (*)(void *))print_char, 
                    (void (*))delete_char, 
                    (int (*)(void *, void *))equal_char);
 

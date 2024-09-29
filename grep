@@ -1,0 +1,84 @@
+[7m[36m** RUNNING test/01_generic_table **[m
+Error in generic_table.c/table_new: n must be > 0
+Error in generic_table.c/table_new: print_data must not be NULL
+Error in generic_table.c/table_new: delete_data must not be NULL
+Error in generic_table.c/table_new: equal_data must not be NULL
+Error in generic_table.c/table_append: tab is NULL
+Error in generic_table.c/table_append: val is NULL
+Error in generic_table.c/table_append: tab->actual_size == tab->max_size, table is full
+Error in generic_table.c/table_insert_at: tab is NULL
+Error in generic_table.c/table_insert_at: index >= actual_size
+Error in generic_table.c/table_insert_at: index >= actual_size
+Error in generic_table.c/table_insert_at: val is NULL
+3 elements were appened succesfully, now trying to remove them
+Error in generic_table.c/table_remove_at: tab is NULL
+Error in generic_table.c/table_remove_at: index > actual_size
+Error in generic_table.c/table_remove_at: index > actual_size
+Error in generic_table.c/table_remove_at: actual_size == 0
+
+Nothing to print, tab is NULL
+Table = { Tab->max_size = 10, tab->actual_size = 0 	
+Tab->data = [] }
+Table = { Tab->max_size = 10, tab->actual_size = 3 	
+Tab->data = [Tab[0] = 2.000000	Tab[1] = 3.000000	Tab[2] = 4.400000	] }
+
+[7m[32mSUCCESS[m
+[7m[36m** RUNNING test/02_vector **[m
+Error in generic_table.c/table_new: n must be > 0
+Error in vector.c/vect_new: Memory allocation of vec_new failed
+Error in generic_table.c/table_new: print_data must not be NULL
+Error in vector.c/vect_new: Memory allocation of vec_new failed
+Error in generic_table.c/table_new: delete_data must not be NULL
+Error in vector.c/vect_new: Memory allocation of vec_new failed
+Error in generic_table.c/table_new: equal_data must not be NULL
+Error in vector.c/vect_new: Memory allocation of vec_new failed
+Table = { Tab->max_size = 2, tab->actual_size = 2 	
+Tab->data = [Tab[0] = a	Tab[1] = b	] }
+Error in generic_table.c/table_remove_at: tab is NULL
+Error in generic_table.c/table_remove_at: index > actual_size
+Error in generic_table.c/table_remove_at: index > actual_size
+Error in generic_table.c/table_remove_at: actual_size == 0
+
+[7m[32mSUCCESS[m
+[7m[36m** RUNNING test/03_link **[m
+Error in link.c/link_add_first: e == NULL
+lol5.4
+lol6
+Error in link.c/link_add_last: e is NULL
+lol
+Error in link.c/link_del_first: link is NULL
+Error in link.c/link_del_last: link is NULL
+
+[7m[32mSUCCESS[m
+[7m[36m** RUNNING test/04_list **[m
+Error in list.c/listle_new: print_data must not be NULL
+Error in list.c/listle_new: delete_data must not be NULL
+Error in list.c/listle_new: equal_data must not be NULL
+Error in list.c/list_add_first: e == NULL
+Error in list.c/list_add_first: link is NULL
+Error in list.c/list_add_last: e is NULL
+Error in list.c/list_add_last: list is NULL
+Error in list.c/list_length: list is NULL
+Error in list.c/list_length: list is NULL
+
+list is of size 0 {	}
+
+list is of size 2 {	a,	b,	}
+Error in list.c/list_find: list is NULL
+Error in list.c/list_find: elem is NULL
+Error in list.c/list_lookup: list is NULL
+Error in list.c/list_lookup: elem is NULL
+Error in list.c/list_lookup: compare is NULL
+Error in list.c/list_link_remove: link is NULL
+Error in list.c/list_link_remove: link is NULL
+
+[7m[32mSUCCESS[m
+[7m[36m** RUNNING test/05_cell **[m
+Error in cell.c/cell_print: cell is NULL
+Error in cell.c/cell_print: print_data is NULL
+Error in cell.c/cell_print: print_key is NULL
+Cell { key = key = 1, data = abcd, hashcode = 6385036879 }
+Error in cell.c/cell_print: delete_data is NULL
+Error in cell.c/cell_print: delete_key is NULL
+
+[7m[32mSUCCESS[m

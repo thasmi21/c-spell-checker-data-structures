@@ -248,7 +248,7 @@ int test_link_delete() {
     return 1;
 }
 
-int test_list_is_empty() {
+int test_link_is_empty() {
 
 
     fprintf(stderr, "\n## Test of the link_is_empty function\n");
@@ -281,7 +281,7 @@ int main() {
     test_link_del_first();
     test_link_del_last();
     test_link_delete();
-    test_list_is_empty();
+    test_link_is_empty();
     fprintf(stderr, "Tests of file 03_link.c passed with success\n");
     return EXIT_SUCCESS;
 }

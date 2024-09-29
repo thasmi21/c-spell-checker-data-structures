@@ -19,7 +19,7 @@ typedef table_t vect_t;
  * 
  * @return A pointer to the newly created vector, or NULL if memory allocation fails or invalid parameters.
  */
-vect_t vect_new(size_t n, void (*print_data)(void*, FILE*), void* (*delete_data)(void*), int (*equal_data)(void*, void*));
+vect_t vect_new(size_t n, void (*print_data)(void*), void* (*delete_data)(void*), int (*equal_data)(void*, void*));
 
 /**
  * vect_append - Adds a new element to the vector.
@@ -80,5 +80,7 @@ int vect_lookup(void* element, vect_t vec, int (*equality_test)(void*, void*));
  *         The vector size is shrunk if necessary to free unused memory.
  */
 int vect_remove_at(size_t index, vect_t vec);
+
+int vect_is_equal(vect_t tab1, vect_t tab2);
 
 #endif // VECT_H
