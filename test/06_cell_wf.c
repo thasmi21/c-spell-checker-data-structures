@@ -209,6 +209,7 @@ int test_cell_wf_print() {
     fprintf(stderr, "<= Test : We try valid parameters, must return not errors\n");
 
     cell_wf_print(cell_wf);
+    printf("\n");
 
     cell_wf = cell_wf_delete(cell_wf);
     assert(cell_wf == NULL);

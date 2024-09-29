@@ -262,7 +262,9 @@ int test_vect_find() {
     assert(p3 != NULL);
     *p3 = 'a';
 
-    assert(vect_find(p3, vec) == 0 && "a not found in place 0");
+    vect_printf(vec);
+    rst = vect_find(p3, vec);
+    assert(rst == 0 && "a not found in place 0");
 
     *p3 = 'c';
     assert(vect_find(p3, vec) == 2 && "c not found in place 2");
@@ -270,6 +272,7 @@ int test_vect_find() {
     *p3 = 'd';
     assert(vect_find(p3, vec) == -1 && "d is not in in but found in");
     free(p3);
+
     vec = vect_delete(vec);
     fprintf(stderr, "=> Test passed with success\n");
 

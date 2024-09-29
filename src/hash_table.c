@@ -8,7 +8,7 @@
 #include "../include/cell_wf.h"
 #include "../include/cell.h"
 
-hash_t hash_new(size_t n, int (*hachage)(void * ),
+hash_t hash_new(size_t n, size_t (*hachage)(void * ),
     void* (*delete_key)(void*), void* (*delete_data)(void*),
     int (*compare_key)(void* e1, void* e2), int (*compare_data)(void* e1, void* e2),
     void (*print_key)(void*), void (*print_data)(void*)) {
@@ -55,7 +55,6 @@ hash_t hash_new(size_t n, int (*hachage)(void * ),
 
     hash_t table;
     table = malloc(sizeof(*table));
-    
     if (table == NULL) {
         printf("Error in hash_table.c/hash_new: malloc table failed\n");
         return NULL;
@@ -73,10 +72,10 @@ hash_t hash_new(size_t n, int (*hachage)(void * ),
     table->print_key = print_key;
     table->print_data = print_data;
 
-    table->data = vect_new(n, (void(*)(void *))list_printf, (void *(*)(void *))list_delete, NULL);
+    table->data = vect_new(n, (void(*)(void *))list_printf, (void *(*)(void *))list_delete, (int(*)(void*, void*))list_is_equal);
     
     if (table->data == NULL) {
-        printf("Error in hash_table.c/hash_new: malloc table->data failed\n");
+        printf("Error in hash_table.c/hash_new: malloc vec =  table->data failed\n");
         return NULL;
     }
 
@@ -106,6 +105,8 @@ hash_t hash_delete(hash_t table) {
         return NULL;
     }
 
+            printf("lolllllaaaaaaaaa\n");
+
     table->data = vect_delete(table->data);
     assert(table->data == NULL);
 
@@ -114,12 +115,14 @@ hash_t hash_delete(hash_t table) {
     return table;
 }
 
-cell_wf_t cell_wf_wrapper(void* key, void* data, size_t hashcode, hash_t table) {
+cell_wf_t cell_wf_wrapper(void* key, void* data, hash_t table) {
 
     if (table == NULL) {
-        printf("Error in hash_table.c/cell_wrapper: table is NULL\n");
+        printf("Error in hash_table.c/cell_wf_wrapper: table is NULL\n");
     }
 
+    size_t hashcode = table->hachage(key);
+    
     cell_wf_t cell_wf = cell_wf_new(key, data, hashcode, 
         table->print_data, table->print_key, table->delete_data, table->delete_key,
         table->compare_data, table->compare_key);
@@ -149,13 +152,14 @@ int hash_put(void* key, void* data, hash_t table) {
         return -4;
     }
     
-    int hashcode = table->hachage(key);
-    int indice = hashcode%(table->size);
+    size_t hashcode = table->hachage(key);
+    size_t indice = hashcode%(table->size);
 
-    cell_t p_cell = cell_new(key, data, hashcode);
+    cell_wf_t p_cell_wf = cell_wf_wrapper(key, data, table);
+    assert(p_cell_wf != NULL);
 
-    if (p_cell == NULL) {
-        printf("Error in hash_table.c/hash_put: cell_new() failed\n");
+    if (p_cell_wf == NULL) {
+        printf("Error in hash_table.c/hash_put: cell__wf_new() failed\n");
         return -5;
     }
 
@@ -166,17 +170,24 @@ int hash_put(void* key, void* data, hash_t table) {
         return -6;
     }
 
-    list_t* p_data = (list_t*)p_vec->data;
+    void** p_data = p_vec->data;
 
     if (p_data == NULL) {
-        printf("Error in hash_table.c/hash_put: list_t* p_data = table->data->data = NULL\n");
+        printf("Error in hash_table.c/hash_put: void** p_data = vec->data = hash_table->data->data = NULL\n");
         return -7;
     }
 
-    p_data[indice] = list_add_first(p_data[indice], p_cell);
+    list_t p_list = p_data[indice];
 
-    if (p_data[indice] == NULL) {
-        printf("Error in hash_table.c/hash_put: list_add_first failed\n");
+    if (p_list == NULL) {
+        printf("Error in hash_table.c/hash_put: p_list == NULL\n");
+        return -8;
+    }
+
+    p_list = list_add_first(p_list, p_cell_wf);
+
+    if (p_list == NULL) {
+        printf("Error in hash_table.c/hash_put: p_list = NULL, list_add_first failed\n");
         return -8;
     }
 
@@ -184,7 +195,7 @@ int hash_put(void* key, void* data, hash_t table) {
     return 1;
 }
 
-void* hash_get_value(void* key, hash_t table) {
+cell_t hash_get_value(void* key, hash_t table) {
 
     if (table == NULL) {
         printf("Error in hash_table.c/hash_get_value: table is NULL\n");
@@ -202,72 +213,131 @@ void* hash_get_value(void* key, hash_t table) {
         return NULL;
     }
 
-    size_t vec_size = p_vec->max_size;
-    list_t* p_list = (list_t*)p_vec->data; 
+    void** p_vec_data = p_vec->data; 
 
-    link_t link = NULL;
-    for (size_t i = 0; i < vec_size; i++) {
-
-        if(p_list[i] == NULL) {
-            printf("Error in hash_table.c/hash_get_value: p_list[%zu] == NULL\n", i);
-            return NULL;
-        }
-
-        list_t list = p_list[i];
-        link = list_find(list, key);
-
-        if (link != NULL) {
-            cell_wf_t cell_wf = (cell_wf_t)link->data;
-            return cell_wf->cell;
-        }
+    if (p_vec_data == NULL) {
+        printf("Error in hash_table.c/hash_get_value: p_vec_data = vec->data is NULL\n");
+        return NULL;
     }
 
+
+    list_t p_list = NULL;
+    link_t link = NULL;
+
+    size_t indice = table->hachage(key)%(table->size);
+    p_list = p_vec_data[indice];
+    if(p_list == NULL) {
+        printf("Error in hash_table.c/hash_get_value: p_list == NULL\n");
+        return NULL;
+    }
+
+    //I am just checking for key, first so data has no importance that why i use random value (0x1) could not be NULL,
+    //Because it is a security is cell_new so compoare data doesnt fail
+    //This adress is out of bound on purpose so no pointer could never equal to it
+
+
+    cell_wf_t p_cell_wf = cell_wf_wrapper(key, (void*)0x1, table);
+    
+    if (p_cell_wf == NULL) {
+        printf("Error in hash_table.c/hash_get_value: p_cell_wf = NULL, cell_wf_wrapper failed\n");
+        return NULL;
+    }
+    link = list_find(p_list, p_cell_wf);
+
+    if (link != NULL) {
+        cell_wf_t cell_wf2 = (cell_wf_t)link->data;
+        free(p_cell_wf->cell);
+        free(p_cell_wf);  
+        p_cell_wf = NULL;  
+        return cell_wf2->cell;
+    }
+
+    free(p_cell_wf->cell);
+    free(p_cell_wf);
+    p_cell_wf = NULL;
     return NULL;
 }
 
-void hash_remove_key(void* key, hash_t table) {
+int hash_remove_key(void* key, hash_t table) {
 
     if (table == NULL) {
         printf("Error in hash_table.c/hash_remove_key: table is NULL\n");
+        return -1;
     }
 
     if (key == NULL) {
         printf("Error in hash_table.c/hash_remove_key: key is NULL\n");
-        return;
+        return -2;
     }
 
     vect_t p_vec = table->data;
     if (p_vec == NULL) {
         printf("Error in hash_table.c/hash_remove_key: table->data is NULL\n");
-        return;
+        return -3;
     }
 
-    size_t vec_size = p_vec->max_size;
-    list_t* p_list = (list_t*)p_vec->data; 
+    void** p_vec_data = p_vec->data; 
 
+    if (p_vec_data == NULL) {
+        printf("Error in hash_table.c/hash_remove_key: p_vec_data = vec->data is NULL\n");
+        return -4;
+    }
+
+    list_t p_list = NULL;
     link_t link = NULL;
-    for (size_t i = 0; i < vec_size; i++) {
 
-        if(p_list[i] == NULL) {
-            printf("Error in hash_table.c/hash_remove_key: p_list[%zu] == NULL\n", i);
-            return;
-        }
+    size_t indice = table->hachage(key)%(table->size);
+    p_list = p_vec_data[indice];
 
-        list_t list = p_list[i];
-        link = list_find(list, key);
-
-        if (link != NULL) {
-            list_link_remove(list, link);
-        }
+    if(p_list == NULL) {
+        printf("Error in hash_table.c/hash_remove_key: p_list == NULL\n");
+        return -5;
     }
 
-    return;
+    //I am just checking for key, first so data has no importance that why i use random value (0x1) could not be NULL,
+    //Because it is a security is cell_new so compoare data doesnt fail
+    //This adress is out of bound on purpose so no pointer could never equal to it
+    cell_wf_t p_cell_wf = cell_wf_wrapper(key, (void*)0x1, table);
+    
+    if (p_cell_wf == NULL) {
+        printf("Error in hash_table.c/hash_remove_key: p_cell_wf = NULL, cell_wf_wrapper failed\n");
+        free(p_cell_wf->cell);
+        free(p_cell_wf);  
+        p_cell_wf = NULL;  
+        return -6;
+    }
+
+    link = list_find(p_list, p_cell_wf);
+
+    if (link == NULL) {
+        printf("Error in hash_table.c/hash_remove_key: link = NULL, list_find_failed maybe the key isnt_t in the hash\n");
+        free(p_cell_wf->cell);
+        free(p_cell_wf);  
+        p_cell_wf = NULL;  
+        return 0;
+    }
+    
+    p_list = list_link_remove(p_list, link);
+
+    if (p_list == NULL) {
+        printf("Error in hash_table.c/hash_remove_key: rst <= 0, list_link_remove failed\n");
+        free(p_cell_wf->cell);
+        free(p_cell_wf);  
+        p_cell_wf = NULL;  
+        return -7; 
+    }
+
+    free(p_cell_wf->cell);
+    free(p_cell_wf);
+    p_cell_wf = NULL;
+    return 1;
 }
 
 void hash_print(hash_t table) {
 
     if (table == NULL) {
         printf("Error in hash_table.c/hash_print: table is NULL\n");
+        return;
     }
 
     vect_t p_vec = table->data;
@@ -277,7 +347,7 @@ void hash_print(hash_t table) {
     }
 
     printf("Hash_table = {\n");
-    printf("table->size = %zu, table->table_number = %zu\n", table->size, table->total_number);
+    printf("hash_table->size = %zu, hash_table->total_number = %zu, hash_table->data = ", table->size, table->total_number);
     vect_printf(table->data);
     printf("}\n");
 }

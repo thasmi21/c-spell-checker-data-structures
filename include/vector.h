@@ -81,4 +81,6 @@ int vect_lookup(void* element, vect_t vec, int (*equality_test)(void*, void*));
  */
 int vect_remove_at(size_t index, vect_t vec);
 
+int vect_is_equal(vect_t tab1, vect_t tab2);
+
 #endif // VECT_H

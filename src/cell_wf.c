@@ -133,7 +133,7 @@ void cell_wf_print(cell_wf_t cell_wf) {
     }
     printf("Cell_wf (");
     cell_print_for_wf(cell_wf->cell, cell_wf->print_data, cell_wf->print_key);
-    printf(")\n");
+    printf(")");
     return;
 }
 

@@ -126,4 +126,7 @@ int table_remove_at(size_t index, table_t tab);
 
 //IF you want size to make sense dont use it
 int table_initialize_i(table_t tab, size_t index, void* val);
+
+int table_is_equal(table_t tab1, table_t tab2);
+
 #endif

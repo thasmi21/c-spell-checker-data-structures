@@ -22,8 +22,12 @@ char* delete_char(char* c) {
 
 int equal_char(char* c1, char* c2) {
 
-    assert(c1 != NULL);
-    assert(c2 != NULL);
+    if (c1 == NULL) {
+        if (c2 == NULL) {
+            return 1;
+        }
+        return 0;
+    }
 
     return (*c1 == *c2);
 }

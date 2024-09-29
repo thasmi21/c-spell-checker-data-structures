@@ -33,23 +33,25 @@ void cell_print(cell_t cell, void (*print_data)(void*), void (*print_key)(void*)
 
     if (cell == NULL) {
         printf("Error in cell.c/cell_print: cell is NULL\n");
+        return;
     }
 
-    else if (print_data == NULL) {
+    if (print_data == NULL) {
         printf("Error in cell.c/cell_print: print_data is NULL\n");
+        return;
     }
 
-    else if (print_key == NULL) {
+    if (print_key == NULL) {
         printf("Error in cell.c/cell_print: print_key is NULL\n");
+        return;
     }
-
-    else {
-        printf("Cell {");
-        print_key(cell->key);
-        printf(", ");
-        print_data(cell->data);
-        printf(", hashcode = %zu }\n", cell->hashcode);
-    }
+    
+    printf("Cell {");
+    print_key(cell->key);
+    printf(", ");
+    print_data(cell->data);
+    printf(", hashcode = %zu }\n", cell->hashcode);
+    return;
 }
 
 void cell_print_for_wf(cell_t cell, void (*print_data)(void*), void (*print_key)(void*)) {

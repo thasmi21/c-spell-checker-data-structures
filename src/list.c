@@ -175,7 +175,7 @@ void list_printf(list_t list) {
 
     }
 
-    printf("\nlist is of size %zu {\t", list->size);
+    printf("List, list->size = %zu list->data = [", list->size);
     link_t p_link = list->data;
     
     while (!link_is_empty(p_link)) {
@@ -183,7 +183,7 @@ void list_printf(list_t list) {
         p_link = p_link->next;
         printf(",\t");
     } 
-    printf("}\n");
+    printf("]");
 }
 
 list_t list_delete(list_t list) {
@@ -318,26 +318,27 @@ link_t list_find(list_t list, void* elem) {
         return NULL;
     }
 
-    link_t p_data = list->data;
-
+    link_t p_link = list->data;
 
     if (list->equal_data == NULL) {
         printf("Error in list.c/list_find: list->equal_data == NULL\n");
         return NULL;
     }
-    while (!link_is_empty(p_data)) {
 
-        int rst = list->equal_data(p_data->data, elem);
+    while (!link_is_empty(p_link)) {
 
+        if (p_link->data == NULL || elem == NULL || list->equal_data == NULL) {
+        }
+        int rst = list->equal_data(p_link->data, elem);
         if (rst == 1) {
-            return p_data;
+            return p_link;
         }
         
         if (rst < 0) {
-            printf("Error in list.c/list_find: compare rst is NULL\n");
+            printf("Error in list.c/list_find: compare rst <0\n");
             return NULL;
         }
-        p_data = p_data->next;
+        p_link = p_link->next;
     }
 
     return NULL;
@@ -422,5 +423,58 @@ list_t list_link_remove(list_t list, link_t link) {
     p_link->next = link_del_first(p_link->next , list->delete_data);
     list->size--;
     return list;
+}
 
+int list_is_equal(list_t list1, list_t list2) {
+
+
+    if (list1 == NULL) {
+        printf("Error in list.c/list_is_equal: list1 = NULL\n");
+        return -1;
+    }
+
+    if (list2 == NULL) {
+        printf("Error in list.c/list_is_equal: list2 = NULL\n");
+        return -2;
+    }
+
+    if (list1->size != list2->size) {
+        return 0;
+    }
+
+    link_t p_link1 = list1->data;
+    link_t p_link2 = list2->data;
+
+    if (p_link1 == NULL && p_link2 == NULL) {
+        return 1;
+    }
+
+    if (list1->equal_data == NULL) {
+        printf("Error in list.c/list_is_equal: list1->equal_data = NULL\n");
+        return -3;
+    }
+    while(p_link1 != NULL) {
+
+        if (p_link2 == NULL) {
+            printf("Error in list.c/list_is_equal: list1 and list2 are not same size while list->size is equal, MAJOR BUG\n");
+            return -3;
+        }
+        int rst = list1->equal_data(p_link1, p_link2);
+
+        if (rst < 0) {
+            printf("Error in list.c/list_is_equal: rst < 0 list1->equal_data failed\n");
+            return -3;
+        }
+
+        int valid_rst = (rst == 1 || rst == 0);
+        if (!valid_rst) {
+            printf("Error in list.c/list_is_equal: rst > 1, MAJOR BUG\n");
+        }
+
+        if (rst == 0) {
+            return 0;
+        }
+    }
+    
+    return 1;
 }

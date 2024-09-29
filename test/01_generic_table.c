@@ -319,12 +319,85 @@ int test_table_initialize_i() {
     return 1;
 }
 
+table_t crea_table() {
+
+    table_t tab;
+    tab = table_new(10, (void (*)(void *))print_double, 
+                   (void (*))delete_double, 
+                   (int (*)(void *, void *))equal_double);
+    assert(tab != NULL);
+
+    double* p0;
+    p0 = malloc(sizeof(double));
+    assert(p0 != NULL);
+    *p0 = 2.0;
+    int rst = table_append(p0, tab);
+    assert(rst == 1);
+
+    double* p1;
+    p1 = malloc(sizeof(double));
+    assert(p0 != NULL);
+    *p1 = 3.0;
+    table_append(p1, tab);
+    assert(tab != NULL);
+
+    double* p2;
+    p2 = malloc(sizeof(double));
+    *p2 = 4.4;
+    table_append(p2, tab);
+    assert(tab != NULL);
+
+    return tab;
+}
+
+int test_table_is_equal() {
+
+    fprintf(stderr, "\n## Test of the table_is_equal function\n");
+
+    table_t tab1 = NULL;
+    table_t tab2 = NULL;
+
+    tab1 = crea_table();
+    tab2 = crea_table();
+
+    fprintf(stderr, "<= Test : We try invalids parameters, must return errors\n");
+
+    int rst = table_is_equal(NULL, tab2);
+    assert(rst == -1);
+    rst = table_is_equal(tab1, NULL);
+    assert(rst == -2);
+
+    fprintf(stderr, "=> Test passed with success\n");
+
+    fprintf(stderr, "<= Test : We try valid parameters, must return not errors\n");
+
+    rst = table_is_equal(tab1, tab2);
+    assert(rst == 1);
+
+    *(double*)((tab1->data)[1]) = 2.1;
+
+    rst = table_is_equal(tab1, tab2);
+    assert(rst == 0);
+
+    tab1 = table_delete(tab1);
+    assert(tab1 == NULL);
+
+    tab2 = table_delete(tab2);
+    assert(tab2 == NULL);
+
+    fprintf(stderr, "=> Test passed with success\n");
+
+    
+    return 1;
+}
+
 int main() {
     test_table_new();
     test_table_append();
     test_table_insert_at();
     test_remove_at();
     test_table_printf();
+    test_table_is_equal();
 
     fprintf(stderr, "Tests of file 01_generic_table.c passed with success\n");
     return EXIT_SUCCESS;
