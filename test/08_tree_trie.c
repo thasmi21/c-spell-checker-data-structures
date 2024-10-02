@@ -229,9 +229,9 @@ int main() {
 
     test_tree_new();
     test_tree_add_word();
-    test_tree_find_word();
     test_tree_delete();
     test_tree_print();
+    test_tree_find_word();
 
     fprintf(stderr, "Tests of file 08_tree_trie.c passed with success\n");
     return EXIT_SUCCESS;

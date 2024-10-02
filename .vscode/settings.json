@@ -62,6 +62,8 @@
     "generic_tab.h": "c",
     "random": "c",
     "string": "c",
-    "vector.h": "c"
+    "vector.h": "c",
+    "tree_patricia.h": "c",
+    "stdio.h": "c"
   }
 }
