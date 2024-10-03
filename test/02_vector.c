@@ -4,12 +4,12 @@
 
 #include "../include/vector.h"
 
-void print_char(char* c) {
+static void print_char(char* c) {
 
     printf("%c", *c);
 }
 
-char* delete_char(char* c) {
+static char* delete_char(char* c) {
 
     assert(c != NULL);
     free(c);
@@ -18,7 +18,7 @@ char* delete_char(char* c) {
     return c;
 }
 
-int equal_char(char* c1, char* c2) {
+static int equal_char(char* c1, char* c2) {
 
     assert(c1 != NULL && c2 != NULL);
 
@@ -26,7 +26,7 @@ int equal_char(char* c1, char* c2) {
 }
 
 //Test if ascci value are same parity
-int equal_char2(char* c1, char* c2) {
+static int equal_char2(char* c1, char* c2) {
 
     assert(c1 != NULL && c2 != NULL);
 
@@ -35,7 +35,7 @@ int equal_char2(char* c1, char* c2) {
     return (i1 == i2);
 }
 
-int test_vect_new() {
+static int test_vect_new() {
 
     fprintf(stderr, "\n## Test of the vect_new function\n");
 
@@ -83,7 +83,7 @@ int test_vect_new() {
     return 1;
 }
 
-int test_vect_append() {
+static int test_vect_append() {
 
     fprintf(stderr, "\n## Test of the vect_append function\n");
 
@@ -137,64 +137,7 @@ int test_vect_append() {
     return 1;
 }
 
-int test_vect_append2() {
-
-    fprintf(stderr, "\n## Test of the vect_append function\n");
-
-    fprintf(stderr, "<= Test : We try to append a new element to a vect and test its parameters\n");
-    
-    vect_t vec;
-    vec = vect_new(1, (void (*)(void *))print_char, 
-                   (void (*))delete_char, 
-                   (int (*)(void *, void *))equal_char);
-
-    printf("First append\n");
-    char* p0;
-    p0 = malloc(sizeof(char));
-    assert(p0 != NULL);
-    *p0 = 'a';
-    int rst = vect_append(p0, vec);
-    assert(rst == 1);
-
-    //printf("vec->actual_size = %d\n", vec->actual_size);
-    assert(vec->actual_size == 1);
-
-    char val0 = *(char*)((vec->data)[0]);
-    assert(val0 == 'a');
-    printf("2nd append\n");
-    char* p1;
-    p1 = malloc(sizeof(char));
-    assert(p1 != NULL);
-    *p1 = 'b';
-    rst = vect_append(p1, vec);
-    assert(rst == 1);
-
-    assert(vec->actual_size == 2);
-    assert(vec->max_size == 2);
-
-    char val1 = *(char*)((vec->data)[1]);
-    assert(val1 == 'b');
-
-    fprintf(stderr, "=> Test passed with success\n");
-
-    fprintf(stderr, "<= Test : We try to delete a vect\n");
-
-    vec = vect_delete(vec);
-    //delete_char(p0);
-    //delete_char(p1);
-    //free(vec->data);
-    //free(vec);
-    //vec = NULL;
-    assert(vec == NULL);
-
-    fprintf(stderr, "=> Test passed with success\n");
-
-    return 1;
-}
-
-
-
-int test_vect_printf() {
+static int test_vect_printf() {
 
     fprintf(stderr, "\n## Test of the vect_printf function\n");
 
@@ -229,7 +172,7 @@ int test_vect_printf() {
     return 1;
 }
 
-int test_vect_find() {
+static int test_vect_find() {
 
     fprintf(stderr, "\n## Test of the vect_find function\n");
 
@@ -279,7 +222,7 @@ int test_vect_find() {
     return 1;
 }
 
-int test_vect_lookup() {
+static int test_vect_lookup() {
 
     fprintf(stderr, "\n## Test of the vect_lookup function\n");
 
@@ -327,7 +270,7 @@ int test_vect_lookup() {
     return 1;
 }
 
-int test_remove_at() {
+static int test_remove_at() {
 
     fprintf(stderr, "\n## Test of the vect_remove_at function\n");
 

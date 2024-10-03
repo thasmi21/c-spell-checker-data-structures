@@ -73,7 +73,6 @@ hash_t hash_new(size_t n, size_t (*hachage)(void * ),
     table->print_data = print_data;
 
     table->data = vect_new(n, (void(*)(void *))list_printf, (void *(*)(void *))list_delete, (int(*)(void*, void*))list_is_equal);
-    
     if (table->data == NULL) {
         printf("Error in hash_table.c/hash_new: malloc vec =  table->data failed\n");
         return NULL;
@@ -352,5 +351,30 @@ void hash_print(hash_t table) {
     printf("}\n");
 }
 
+size_t hash_indice(void* key, hash_t table) {
+
+    size_t size = table->size;
+
+    if (table == NULL) {
+        printf("Error in hash_table.c/hash_indice: table is NULL\n");
+        return size;
+    }
+
+    if (key == NULL) {
+        printf("Error in hash_table.c/hash_indice: key is NULL\n");
+        return size;
+    }
+
+    if (table->hachage == NULL) {
+        printf("Error in hash_table.c/hash_indice: table->hachage is NULL\n");
+        return size;
+    }
+
+    size_t hash = table->hachage(key);
+    size_t indice = hash%size;
+    return indice;
+}
+
 //int hash_new_length(int sens, hash_t table) {
 //}
+

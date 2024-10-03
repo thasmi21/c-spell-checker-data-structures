@@ -4,12 +4,12 @@
 
 #include "../include/generic_table.h"
 
-void print_double(double* d) {
+static void print_double(double* d) {
 
     printf("%f", *d);
 }
 
-double* delete_double(double* d) {
+static double* delete_double(double* d) {
 
     assert(d != NULL);
     free(d);
@@ -18,14 +18,14 @@ double* delete_double(double* d) {
     return d;
 }
 
-int equal_double(double* d1, double* d2) {
+static int equal_double(double* d1, double* d2) {
 
     assert(d1 != NULL && d2 != NULL);
 
     return (*d1 == *d2);
 }
 
-int test_table_new() {
+static int test_table_new() {
 
     fprintf(stderr, "## Test of the table_new function\n");
 
@@ -71,7 +71,7 @@ int test_table_new() {
     return 1;
 }
 
-int test_table_append() {
+static int test_table_append() {
 
     fprintf(stderr, "## Test of the table_append function\n");
 
@@ -133,7 +133,7 @@ int test_table_append() {
     return 1;
 }
 
-int test_table_insert_at() {
+static int test_table_insert_at() {
 
     fprintf(stderr, "## Test of the table_insert_at function\n");
     
@@ -183,7 +183,7 @@ int test_table_insert_at() {
     return 1;
 }
 
-int test_remove_at() {
+static int test_remove_at() {
 
     fprintf(stderr, "## Test of the table_remove_at function\n");
 
@@ -243,7 +243,7 @@ int test_remove_at() {
     return 1;
 }
 
-int test_table_printf() {
+static int test_table_printf() {
 
     fprintf(stderr, "## Test of the table_insert_at function\n");
 
@@ -284,7 +284,7 @@ int test_table_printf() {
     return 1;
 }
 
-int test_table_initialize_i() {
+static int test_table_initialize_i() {
 
     fprintf(stderr, "\n## Test of the table_initialize_i function\n");
 
@@ -319,7 +319,7 @@ int test_table_initialize_i() {
     return 1;
 }
 
-table_t crea_table() {
+static table_t crea_table() {
 
     table_t tab;
     tab = table_new(10, (void (*)(void *))print_double, 
@@ -350,7 +350,7 @@ table_t crea_table() {
     return tab;
 }
 
-int test_table_is_equal() {
+static int test_table_is_equal() {
 
     fprintf(stderr, "\n## Test of the table_is_equal function\n");
 
@@ -398,7 +398,7 @@ int main() {
     test_remove_at();
     test_table_printf();
     test_table_is_equal();
-
+    test_table_initialize_i();
     fprintf(stderr, "Tests of file 01_generic_table.c passed with success\n");
     return EXIT_SUCCESS;
 }   

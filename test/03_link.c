@@ -4,7 +4,7 @@
 
 #include "../include/link.h"
 
-char* delete_char(char* c) {
+static char* delete_char(char* c) {
 
     assert(c != NULL);
     free(c);
@@ -13,11 +13,11 @@ char* delete_char(char* c) {
     return NULL;
 }
 
-void print_char(char* c) {
- printf("%c", *c);
-}
+//static void print_char(char* c) {
+// printf("%c", *c);
+//}
 
-char* create_char(char value) {
+static char* create_char(char value) {
 
  char* p_chr = malloc(sizeof(char));
  assert(p_chr != NULL && "Error in 03_link.c/create_char: malloc failed and returned NULL\n");
@@ -26,7 +26,7 @@ char* create_char(char value) {
 }
 
 
-int test_link_new() {
+static int test_link_new() {
 
     fprintf(stderr, "\n## Test of the link_new function\n");
 
@@ -43,7 +43,7 @@ int test_link_new() {
 
 }
 
-int test_link_add_first() {
+static int test_link_add_first() {
 
     fprintf(stderr, "\n## Test of the link_add_first function\n");
 
@@ -87,7 +87,7 @@ int test_link_add_first() {
     return 1;
 }
 
-int test_link_add_last() {
+static int test_link_add_last() {
 
     fprintf(stderr, "\n## Test of the link_add_last function\n");
 
@@ -133,7 +133,7 @@ int test_link_add_last() {
     return 1;
 }
 
-int test_link_del_first() {
+static int test_link_del_first() {
     
     fprintf(stderr, "\n## Test of the link_del_first function\n");
 
@@ -177,7 +177,7 @@ int test_link_del_first() {
     return 1;
 }
 
-int test_link_del_last() {
+static int test_link_del_last() {
 
     fprintf(stderr, "\n## Test of the link_del_first function\n");
 
@@ -222,7 +222,7 @@ int test_link_del_last() {
     return 1;
 }
 
-int test_link_delete() {
+static int test_link_delete() {
 
     fprintf(stderr, "\n## Test of the link_del_first function\n");
 
@@ -248,7 +248,7 @@ int test_link_delete() {
     return 1;
 }
 
-int test_link_is_empty() {
+static int test_link_is_empty() {
 
 
     fprintf(stderr, "\n## Test of the link_is_empty function\n");

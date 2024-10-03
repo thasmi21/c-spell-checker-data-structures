@@ -16,4 +16,7 @@ int radix_find(radix_t radix, char* str);
 radix_t radix_delete(radix_t radix);
 
 void radix_print(radix_t radix, size_t index);
+
+radix_t radix_find_rad(radix_t radix, char* str);
+
 #endif

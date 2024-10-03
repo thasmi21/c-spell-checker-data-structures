@@ -116,6 +116,5 @@ int vect_remove_at(size_t index, vect_t vec) {
 }
 
 int vect_is_equal(vect_t tab1, vect_t tab2) {
-
     return table_is_equal((table_t)tab1, (table_t)tab2);
 }

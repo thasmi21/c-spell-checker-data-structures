@@ -68,11 +68,11 @@ void* list_first(list_t list) {
 
     if (list == NULL) {
         printf("Error in list.c/list_first: list is NULL\n");
-        return NULL;
     }
 
     if (list->data == NULL && list->size > 0) {
         printf("Error in list.c/list_first: list->data is NULL && size > 0\n");
+        return NULL;
         return NULL;
     }
 

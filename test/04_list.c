@@ -5,11 +5,11 @@
 #include "../include/list.h"
 #include "../include/link.h"
 
-void print_char(char* c) {
+static void print_char(char* c) {
     printf("%c", *c);
 }
 
-char* delete_char(char* c) {
+static char* delete_char(char* c) {
 
     if (c == NULL) {
         return NULL;
@@ -20,7 +20,7 @@ char* delete_char(char* c) {
     return c;
 }
 
-int equal_char(char* c1, char* c2) {
+static int equal_char(char* c1, char* c2) {
 
     if (c1 == NULL) {
         if (c2 == NULL) {
@@ -33,7 +33,7 @@ int equal_char(char* c1, char* c2) {
 }
 
 //Test if ascci value are same parity
-int equal_char2(char* c1, char* c2) {
+static int equal_char2(char* c1, char* c2) {
 
     assert(c1 != NULL && c2 != NULL);
 
@@ -42,7 +42,7 @@ int equal_char2(char* c1, char* c2) {
     return (i1 == i2);
 }
 
-char* create_char(char value) {
+static char* create_char(char value) {
 
     char* p_chr = malloc(sizeof(char));
     assert(p_chr != NULL && "Error in 04_list.c/create_char: malloc failed and returned NULL\n");
@@ -50,7 +50,7 @@ char* create_char(char value) {
     return p_chr;
 }
 
-list_t list_crea_list() {
+static list_t list_crea_list() {
 
     list_t list = list_new((void (*)(void *))print_char, 
     (void (*))delete_char, 
@@ -70,7 +70,7 @@ list_t list_crea_list() {
     return list; 
 }
 
-int test_list_new() {
+static int test_list_new() {
 
     fprintf(stderr, "\n## Test of the list_new function\n");
 
@@ -114,7 +114,7 @@ int test_list_new() {
     return 1;
 }
 
-int test_list_add_first() {
+static int test_list_add_first() {
 
     fprintf(stderr, "\n## Test of the list_add_first function\n");
 
@@ -169,7 +169,7 @@ int test_list_add_first() {
 
 }
 
-int test_list_add_last() {
+static int test_list_add_last() {
 
     fprintf(stderr, "\n## Test of the list_add_last function\n");
 
@@ -225,7 +225,7 @@ int test_list_add_last() {
 
 }
 
-int test_list_is_empty() {
+static int test_list_is_empty() {
 
     fprintf(stderr, "\n## Test of the list_is_empty function\n");
 
@@ -252,7 +252,7 @@ int test_list_is_empty() {
     return 1;
 }
 
-int test_list_del_first() {
+static int test_list_del_first() {
 
     fprintf(stderr, "\n## Test of the list_del_last function\n");
 
@@ -282,7 +282,7 @@ int test_list_del_first() {
     return 1;
 }
 
-int test_list_del_last() {
+static int test_list_del_last() {
 
     fprintf(stderr, "\n## Test of the list_del_last function\n");
 
@@ -312,7 +312,7 @@ int test_list_del_last() {
     return 1;
 }
 
-int test_list_delete() {
+static int test_list_delete() {
 
     fprintf(stderr, "\n## Test of the list_delete function\n");
 
@@ -327,7 +327,7 @@ int test_list_delete() {
     return 1;
 }
 
-int test_list_length() {
+static int test_list_length() {
 
     fprintf(stderr, "\n## Test of the lis_length function\n");
 
@@ -357,7 +357,7 @@ int test_list_length() {
     return 1;
 }
 
-int test_list_printf() {
+static int test_list_printf() {
 
     fprintf(stderr, "\n## Test of the list_length function\n");
 
@@ -387,7 +387,7 @@ int test_list_printf() {
     return 1;
 }
 
-int test_list_find() {
+static int test_list_find() {
 
     fprintf(stderr, "\n## Test of the list_find function\n");
 
@@ -429,7 +429,7 @@ int test_list_find() {
     return 1;
 }
 
-int test_list_lookup() {
+static int test_list_lookup() {
 
     fprintf(stderr, "\n## Test of the list_lookup function\n");
 
@@ -480,7 +480,7 @@ int test_list_lookup() {
     return 1;
 }
 
-int test_list_link_remove() {
+static int test_list_link_remove() {
 
     fprintf(stderr, "\n## Test of the list_link_remove function\n");
 

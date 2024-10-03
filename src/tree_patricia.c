@@ -3,7 +3,7 @@
 
 #include "../include/tree_patricia.h"
 
-#define ERR(msg) printf("Error in tree_trie.c/%s: %s\n", __func__, msg)
+#define ERR(msg) printf("Error in tree_patricia.c/%s: %s\n", __func__, msg)
 
 radix_t radix_new(char c, radix_t brother) {
     

@@ -64,6 +64,8 @@
     "string": "c",
     "vector.h": "c",
     "tree_patricia.h": "c",
-    "stdio.h": "c"
+    "stdio.h": "c",
+    "initializer_list": "c",
+    "utility": "c"
   }
 }

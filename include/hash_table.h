@@ -44,6 +44,10 @@ void hash_print(hash_t table) ;
 // sens =1 pour accroitre la table, -1 sinon
 int hash_new_length(int sens, hash_t table);
 
+//TO test, return table->size as errors because it is an impossible value
+size_t hash_indice(void* key, hash_t table);
+
+
 cell_wf_t cell_wrapper(void* key, void* data, hash_t table);
 
 #endif
