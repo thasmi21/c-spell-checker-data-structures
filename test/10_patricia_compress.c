@@ -390,6 +390,31 @@ int test_patricia_compress() {
     return 1;
 }
 
+int test_patricia_compressor() {
+
+    ENTERING();
+
+    radix_t radix = radix_maker();
+    assert(radix != NULL);
+
+    INVALID();
+
+    radix_t tmp_radix = patricia_compressor(NULL);
+    assert(tmp_radix == NULL);
+
+    SUCCESS();
+
+    radix = patricia_compressor(radix);
+    assert(radix != NULL);
+
+    VALID();
+
+    radix = patricia_compressed_delete(radix);
+    assert(radix == NULL);
+    SUCCESS();
+    return 1;
+}
+
 int test_() {
 
     ENTERING();
@@ -413,5 +438,7 @@ int main() {
     test_radix_add_in_hash();
     test_radix_in_hash_find();
     test_patricia_compress();
+    test_patricia_compressor();
+
     EXIT();
 }
