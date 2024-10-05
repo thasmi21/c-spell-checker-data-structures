@@ -24,6 +24,4 @@ int cell_compare(cell_t cell1, cell_t cell2, int(*compare_data)(void*, void*), i
 
 int cell_compare_key(cell_t cell1, cell_t cell2, int (*compare_key)(void*, void*));
 
-size_t hash_string(char* str);
-
 #endif

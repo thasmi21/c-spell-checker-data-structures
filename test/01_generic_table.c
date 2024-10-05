@@ -399,6 +399,7 @@ int main() {
     test_table_printf();
     test_table_is_equal();
     test_table_initialize_i();
+    
     fprintf(stderr, "Tests of file 01_generic_table.c passed with success\n");
     return EXIT_SUCCESS;
 }   

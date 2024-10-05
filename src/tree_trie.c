@@ -16,6 +16,8 @@ tree_t tree_new() {
         return NULL;
     }
 
+    tree->nb_of_parents = 1;
+    
     for (int i = 0; i<ASIZE; i++) {
         (tree->sons)[i] = NULL;
     }

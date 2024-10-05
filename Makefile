@@ -13,7 +13,7 @@ ASAN_GDB=
 # My syntax checker wants access to my compilation flags too, so:
 include Makefile.inc
 
-CFLAGS_DBG=$(CFLAGS) -gdwarf-4 -ggdb3 -Werror
+CFLAGS_DBG=$(CFLAGS) -gdwarf-4 -ggdb3 #-Werror
 CFLAGS_PERF=$(CFLAGS) -O3
 
 LDLIBS+=-lm

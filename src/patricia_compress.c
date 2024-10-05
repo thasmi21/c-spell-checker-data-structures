@@ -3,15 +3,21 @@
 #include <string.h>
 
 #include <../include/cell.h>
-#include <../include/hash_table.h>
+#include <../include/hash_table.h>  
 #include <../include/tree_patricia.h>
 #include <../include/vector.h>
+#include <../include/patricia_compress.h>
 
 #define ERR(msg) printf("Error in patricia_compress.c/%s: %s\n", __func__, msg)
 
 static void print_char(char* c) {
     printf("%c", *c);
 }
+
+static void print_str(char* s) {
+    printf("%s", s);
+}
+
 
 static char* delete_char(char* c) {
 
@@ -49,6 +55,16 @@ static char* char_make(char c) {
     return p_char;
 }
 
+static size_t hash_string(char* str) {
+    unsigned long hash = 5381;
+    int c;
+
+    while ((c = *str++)) {
+        hash = ((hash << 5) + hash) + c;  // hash * 33 + c
+    }
+
+    return hash;
+}
 
 vect_t v_key_new() {
     
@@ -64,11 +80,13 @@ vect_t v_key_new() {
 int make_add_char(char c, vect_t v_key) {
     char* p_charV = char_make(c);
     if (p_charV == NULL) {
+        free(p_charV);
         ERR("char_make failed");
         return -1;
     }
     int rst = vect_append(p_charV, v_key);
     if (rst != 1) {
+        free(p_charV);
         ERR("vect_append failed");
         return -2;
     }
@@ -76,17 +94,14 @@ int make_add_char(char c, vect_t v_key) {
 }
 
 int add_v_key_char(radix_t radix, vect_t v_key) {
-    
     if (radix == NULL) {
         ERR("radix = NULL");
         return -1;
     }
-    
     if (v_key == NULL) {
         ERR("v_key = NULL");
         return -2;
     }
-
     int rst = make_add_char('V', v_key); //add value ref
     if (rst != 1) {
         ERR("Make_add_char V failed");
@@ -216,6 +231,10 @@ char* make_key(radix_t radix) {
     return str_key;
 }
 
+static int str_compare(char *s1, char* s2) {
+    return (strcmp(s1, s2) + 1);
+}
+
 int radix_add_in_hash(radix_t radix, hash_t h_tab) {
 
     if (radix == NULL) {
@@ -241,9 +260,6 @@ int radix_add_in_hash(radix_t radix, hash_t h_tab) {
         ERR("rst != 1, hash_put failed");
         return -4;
     }
-
-    free(str_key);
-    str_key = NULL;
     return 1;
 }
 
@@ -288,43 +304,152 @@ radix_t patricia_compress(radix_t radix, hash_t h_tab) {
         return NULL;
     }
 
-    if (h_tab == NULL) {
+    if (h_tab == NULL) {   
         ERR("h_tab = NULL");
-        return NULL;
+        return radix;
     }
 
     if (radix->sons != NULL) {
+
         radix->sons = patricia_compress(radix->sons, h_tab);
         if (radix->sons == NULL) {
             ERR("In case,radix->sons != NULL, rst != 1, patricia_compress failed");
-            return NULL;
+            return radix;
         }
     }
-    
+
     if (radix->brothers != NULL) {
         radix->brothers = patricia_compress(radix->brothers, h_tab);
         if (radix->brothers == NULL) {
             ERR("In case, radix->brothers != NULL, rst != 1, patricia_compress failed");
-            return NULL;
+            return radix;
         }
     }
-        
+
     radix_t radix_bis = radix_in_hash_find(radix, h_tab);
     if (radix_bis == NULL) {
         int rst = radix_add_in_hash(radix, h_tab);
         if (rst != 1) {
             ERR("In case, radix_bis == NULL, rst != 1, radix_add_in_hash failed");
-            return NULL;
+            return radix;
         }
-
         return radix;
     }
     else {
-        radix = radix_delete(radix);
+
+        radix_bis->nb_of_parents = radix_bis->nb_of_parents + radix->nb_of_parents;
+        radix = patricia_compressed_delete(radix);
         if (radix != NULL) {
-            ERR("In case, else, radix != NULL, radix_delete failed");
-            return NULL;
+            ERR("In case, else, radix != NULL, patricia_compressed_delete failed");
+            return radix;
         }
+
         return radix_bis;
     }
+} 
+
+
+hash_t hash_patricia_new(size_t n) {
+
+    hash_t h_tab = hash_new(n, (size_t (*)(void *))hash_string, (void *(*)(void *))delete_char, (void *(*)(void *))0x1,
+     (int (*)(void *, void *))str_compare, (int (*)(void *, void *))0x1, (void (*)(void *))print_str, (void (*)(void *))radix_print2);
+    //0X1 IS FOR USELLESS FUNCTION, BUT NULL IS INVALID (will not code them just for fun, the best code to debug is no code)
+
+    if (h_tab == NULL) {
+        ERR("Hash_new failed");
+        return NULL;
+    }
+    return h_tab;
+} 
+
+radix_t patricia_compressor(radix_t radix) {
+    
+
+    if (radix == NULL) {
+        ERR("radix = NULL");
+        return NULL;
+    }
+
+    hash_t h_tab = hash_patricia_new(100);
+    
+    if (h_tab == NULL) {
+        ERR("hash_patricia_new failed");
+        return NULL;
+    }
+
+    if (h_tab == NULL) {
+        ERR("hash_new failed");
+        return radix;
+    }
+
+    radix = patricia_compress(radix, h_tab);
+
+    if (radix == NULL) {
+        ERR("patricia_compress failed");
+        return radix;
+    }
+
+    h_tab = hash_delete(h_tab);
+
+    if (h_tab != NULL) {
+        ERR("hash delete failed");
+        return radix;
+    }
+
+    return radix;
+}
+
+radix_t patricia_compressed_delete(radix_t radix) {
+
+    if (radix == NULL) {
+        ERR("radix = NULL");
+        return NULL;
+    }
+
+    if (radix->sons != NULL) {
+
+        if (radix->sons->nb_of_parents == 0) {
+            ERR("MAJOR BUG, radix->sons->nb_of_parents == 0");
+            return radix;
+        }
+        if (radix->sons->nb_of_parents != 1) {
+            (radix->sons->nb_of_parents)--;
+            radix->sons = NULL;
+        }
+        else{
+            radix->sons =  patricia_compressed_delete(radix->sons);
+            if (radix->sons != NULL) {
+                ERR("In case, radix->sons != NULL else, radix->sons != NULL, patricia_compressed_delete failed");
+                return radix->sons;
+            }
+        }
+    }
+    if (radix->brothers != NULL) {
+
+        if (radix->brothers->nb_of_parents == 0) {
+            ERR("MAJOR BUG, radix->brothers->nb_of_parents == 0");
+            return radix;
+        }
+
+        if (radix->brothers->nb_of_parents != 1) {
+            (radix->brothers->nb_of_parents)--;
+            radix->brothers = NULL;
+        }
+        else{
+            radix->brothers =  patricia_compressed_delete(radix->brothers);
+            if (radix->brothers != NULL) {
+                ERR("In case, radix->brothers != NULL else, radix->brothers != NULL, patricia_compressed_delete failed");
+                return radix->brothers;
+            }
+        }
+    }
+    
+    if (radix->sons != NULL || radix->brothers != NULL) {
+        ERR("patricia_compressed_delete failed getting family to NULL before freeing the node");
+        return radix;
+    }
+
+    free(radix);
+    radix = NULL;
+    return radix;
 }

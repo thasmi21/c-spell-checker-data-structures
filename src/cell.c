@@ -23,6 +23,7 @@ cell_t cell_new(void* key, void* data, size_t hashcode) {
     }
 
     cell->key = key;
+
     cell->data = data;
     cell->hashcode = hashcode;
 
@@ -46,9 +47,9 @@ void cell_print(cell_t cell, void (*print_data)(void*), void (*print_key)(void*)
         return;
     }
     
-    printf("Cell {");
+    printf("Cell {key = ");
     print_key(cell->key);
-    printf(", ");
+    printf(", data = ");
     print_data(cell->data);
     printf(", hashcode = %zu }\n", cell->hashcode);
     return;
@@ -69,10 +70,12 @@ void cell_print_for_wf(cell_t cell, void (*print_data)(void*), void (*print_key)
     }
 
     else {
-        printf("Cell {");
+        printf("Cell {key = ");
         print_key(cell->key);
-        printf(", ");
+        printf(", data =");
+
         print_data(cell->data);
+
         printf(", hashcode = %zu }", cell->hashcode);
     }
 }
@@ -96,9 +99,10 @@ cell_t cell_delete(cell_t cell, void* (*delete_data)(void*), void*(*delete_key)(
 
     assert(cell->data != NULL);
 
-    cell->data = delete_data(cell->data);
-
-    assert(cell->data == NULL);
+    if (delete_data != (void*(*)(void*))0x1) {
+        cell->data = delete_data(cell->data);
+        assert(cell->data == NULL);
+    }
 
     cell->key = delete_key(cell->key);
     assert(cell->key == NULL);

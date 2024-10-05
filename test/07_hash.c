@@ -77,7 +77,7 @@ int compare_key(char* key1, char* key2) {
     return (rst == 0);
 }
 
-size_t hash_string(char* str) {
+static size_t hash_string(char* str) {
     unsigned long hash = 5381;
     int c;
 
@@ -385,6 +385,59 @@ int test_hash_delete() {
     return 1;
 }
 
+int test_hash_indice() {
+
+    fprintf(stderr, "\n## Test of the hash_indice function\n");
+
+    fprintf(stderr, "<= Test : We try invalids parameters, must return errors\n");
+
+    hash_t table = hash_new_wrapper();
+    
+    char* key = crea_data("abcde", 5);
+    char* data = crea_data("abcde", 5);
+
+    int rst = hash_put(key, data, table);
+    assert(rst == 1);
+
+    size_t i = hash_indice(NULL, table);
+    assert(i == table->size);
+    
+    i = hash_indice(key, NULL);
+    assert(i == (size_t)-1);
+
+    fprintf(stderr, "=> Test passed with success\n");
+
+    fprintf(stderr, "<= Test : We try valid parameters, must return not errors\n");
+
+    i = hash_indice(key, table);
+    assert(i != table->size);
+    
+    size_t hash = table->hachage(key);
+    hash = hash%(table->size);
+
+    assert(i == hash);
+
+    vect_t v_data = table->data;
+    void** p_vect_data = v_data->data;
+    assert(p_vect_data != NULL);
+    list_t p_l = p_vect_data[i];
+    assert(p_l != NULL);
+    link_t p_link = p_l->data;
+    assert(p_link != NULL);
+    cell_wf_t cell_wf = p_link->data;
+    assert(cell_wf != NULL);
+    cell_t cell = cell_wf->cell;
+    assert(cell != NULL);
+    assert(cell->data == data);
+    assert(cell->key == key);
+
+    table = hash_delete(table);
+    assert(table == NULL);
+
+    fprintf(stderr, "=> Test passed with success\n");
+    return 1;
+}
+
 int test_() {
 
     fprintf(stderr, "\n## Test of the  function\n");
@@ -407,6 +460,7 @@ int main() {
     test_hash_remove_key();
     test_hash_print();
     test_hash_delete();
+    test_hash_indice();
 
     fprintf(stderr, "Tests of file 07_hash.c passed with success\n");
     return EXIT_SUCCESS;

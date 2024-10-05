@@ -104,8 +104,6 @@ hash_t hash_delete(hash_t table) {
         return NULL;
     }
 
-            printf("lolllllaaaaaaaaa\n");
-
     table->data = vect_delete(table->data);
     assert(table->data == NULL);
 
@@ -353,13 +351,12 @@ void hash_print(hash_t table) {
 
 size_t hash_indice(void* key, hash_t table) {
 
-    size_t size = table->size;
-
     if (table == NULL) {
         printf("Error in hash_table.c/hash_indice: table is NULL\n");
-        return size;
+        return (size_t)-1;
     }
 
+    size_t size = table->size;
     if (key == NULL) {
         printf("Error in hash_table.c/hash_indice: key is NULL\n");
         return size;

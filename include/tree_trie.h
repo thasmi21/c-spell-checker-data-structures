@@ -4,6 +4,7 @@
 #define ASIZE 27 //THE 27 is reserved for \0
 
 typedef struct _node {
+    size_t nb_of_parents;
     struct _node *sons[ASIZE]; 
 } *tree_t;
 

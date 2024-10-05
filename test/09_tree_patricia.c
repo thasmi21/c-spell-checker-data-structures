@@ -212,6 +212,8 @@ int test_radix_find() {
     return 1;
 }
 
+
+
 int main() {
     test_radix_new();
     test_radix_add_word();

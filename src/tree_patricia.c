@@ -18,6 +18,8 @@ radix_t radix_new(char c, radix_t brother) {
     radix->value = c;
     radix->sons = NULL;
 
+    radix->nb_of_parents = 1;
+
     //TO make compiler happy 
     if (brother == NULL) {
         radix->brothers = NULL;
@@ -171,15 +173,24 @@ void radix_print(radix_t radix, size_t index) {
     }
 
     if (radix->value == '\0') {
+        //printf("0, %p\n", radix);
         printf("0\n");
+
 
     }
     else {
+        //printf("%c, %p\n", radix->value, radix);
         printf("%c\n", radix->value);
+
     }
 
     radix_print(radix->sons, index + 1);
     radix_print(radix->brothers, index);
 
     return;
+}
+
+//JUST A WRAPPER
+void radix_print2(radix_t radix) {
+    radix_print(radix, 0);
 }
