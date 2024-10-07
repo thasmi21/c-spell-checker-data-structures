@@ -8,6 +8,7 @@
 #include "../include/tree_patricia.h"
 #include "../include/vector.h"
 #include "../include/patricia_compress.h"
+#include "../include/key.h"
 
 #define ENTERING() fprintf(stderr, "\n## Enterring in %s function\n", __func__);
 #define VALID()    fprintf(stderr, "<= Test : We try valid parameters, must return not errors\n");
@@ -208,7 +209,7 @@ static int test_make_char_key() {
     return 1;
 }
 
-static int test_make_key() {
+static int test_make_key_radix() {
 
     ENTERING();
 
@@ -217,14 +218,14 @@ static int test_make_key() {
 
     INVALID();
 
-    char* str_key = make_key(NULL);
+    char* str_key = make_key_radix(NULL);
     assert(str_key == NULL);
 
     SUCCESS();
 
     VALID();
 
-    str_key = make_key(radix);
+    str_key = make_key_radix(radix);
     assert(str_key != NULL);
     assert(str_key[0] == 'V');
     assert(str_key[1] == '0');
@@ -277,7 +278,7 @@ static int test_radix_add_in_hash() {
     rst = radix_add_in_hash(radix, h_tab);
     assert(rst == 1);
 
-    char* key = make_key(radix);
+    char* key = make_key(radix, (int(*)(void*, vect_t))add_v_key_char);
     cell_t cell =hash_get_value(key, h_tab);  
     assert(cell != NULL);
     assert(cell->data == radix);
@@ -434,7 +435,7 @@ int main() {
     test_make_add_char();
     test_add_v_key_char();
     test_make_char_key();
-    test_make_key();
+    test_make_key_radix();
     test_radix_add_in_hash();
     test_radix_in_hash_find();
     test_patricia_compress();

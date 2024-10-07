@@ -6,17 +6,24 @@
 typedef struct _node {
     size_t nb_of_parents;
     struct _node *sons[ASIZE]; 
-} *tree_t;
+} *trie_t;
 
-tree_t tree_new();
+trie_t trie_new();
 
-int tree_add_word(tree_t tree, char* str);
+int trie_add_word(trie_t trie, char* str);
 
-int tree_find_word(tree_t tree, char* str);
+int trie_find_word(trie_t trie, char* str);
 
-tree_t tree_delete(tree_t tree);
+trie_t trie_delete(trie_t trie);
 
-void tree_print(tree_t tree, size_t index);
+void trie_print(trie_t trie, size_t index);
+
+//Just a wrapper
+void trie_print2(trie_t trie);
+
+void trie_print_test2(trie_t trie);
+
 #endif
+
 
 //ONLY TAKES AS INPUT abc..yz

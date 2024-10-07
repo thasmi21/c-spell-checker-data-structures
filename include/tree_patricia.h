@@ -1,5 +1,5 @@
-#ifndef TREE_TRIE
-#define TREE_TRIE
+#ifndef TREE_PATRICIA
+#define TREE_PATRICIA
 
 typedef struct node_radix {
     size_t nb_of_parents;

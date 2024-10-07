@@ -6,27 +6,27 @@
 
 #define ERR(msg) printf("Error in tree_trie.c/%s: %s\n", __func__, msg)
 
-tree_t tree_new() {
+trie_t trie_new() {
 
-    tree_t tree;
-    tree = malloc(sizeof(*tree));
+    trie_t trie;
+    trie = malloc(sizeof(*trie));
     
-    if (tree == NULL) {
+    if (trie == NULL) {
         ERR("Malloc failed");
         return NULL;
     }
 
-    tree->nb_of_parents = 1;
+    trie->nb_of_parents = 1;
     
     for (int i = 0; i<ASIZE; i++) {
-        (tree->sons)[i] = NULL;
+        (trie->sons)[i] = NULL;
     }
-    return tree;
+    return trie;
 }
 
-int tree_add_word(tree_t tree, char* str) {
+int trie_add_word(trie_t trie, char* str) {
 
-    if (tree == NULL) {
+    if (trie == NULL) {
         ERR("Tree = NULL");
         return -1;
     }
@@ -36,30 +36,30 @@ int tree_add_word(tree_t tree, char* str) {
         return -2;
     }
 
-    //if (tree->sons == NULL) {
+    //if (trie->sons == NULL) {
     //   ERR("Tree->sons = NULL");
     //    return -3;
     //}
 
-    tree_t p_tree = tree;
-    tree_t* sons = tree->sons;
+    trie_t p_trie = trie;
+    trie_t* sons = trie->sons;
     char* p_char = str;
     char c = *p_char;
     while (c != '\0') {
 
         int indice = c - 0x61;
         if (sons[indice] == NULL) {
-            sons[indice] = tree_new();
+            sons[indice] = trie_new();
 
             if (sons[indice] == NULL) {
-                ERR("Son[indice] == NULL, tree_new() failed");
+                ERR("Son[indice] == NULL, trie_new() failed");
                 return -4;
             }
         }
-        p_tree = sons[indice];
-        sons = p_tree->sons;
+        p_trie = sons[indice];
+        sons = p_trie->sons;
         if (sons == NULL) {
-            ERR("New Sons[indice] = NULL, getting tree->sons failed");
+            ERR("New Sons[indice] = NULL, getting trie->sons failed");
             return -5;
         }
 
@@ -68,19 +68,19 @@ int tree_add_word(tree_t tree, char* str) {
     }
 
     if (sons[ASIZE - 1] == NULL) {
-        sons[ASIZE - 1] = tree_new();
+        sons[ASIZE - 1] = trie_new();
 
         if (sons[ASIZE - 1] == NULL) {
-            ERR("Son[ASIZE - 1] == NULL, tree_new() failed FOR \0");
+            ERR("Son[ASIZE - 1] == NULL, trie_new() failed FOR \0");
             return -6;
         }
     }
     return 1;
 }
 
-int tree_find_word(tree_t tree, char* str) {
+int trie_find_word(trie_t trie, char* str) {
     
-    if (tree == NULL) {
+    if (trie == NULL) {
         ERR("Tree = NULL");
         return -1;
     }
@@ -90,13 +90,13 @@ int tree_find_word(tree_t tree, char* str) {
         return -2;
     }
 
-    //if (tree->sons == NULL) {
+    //if (trie->sons == NULL) {
     //    ERR("Tree->sons = NULL");
     //    return -3;
     //}
 
-    tree_t p_tree = tree;
-    tree_t* sons = tree->sons;
+    trie_t p_trie = trie;
+    trie_t* sons = trie->sons;
     char* p_char = str;
     char c = *p_char;
     while (c != '\0') {
@@ -105,10 +105,10 @@ int tree_find_word(tree_t tree, char* str) {
         if (sons[indice] == NULL) {
             return 0;
         }
-        p_tree = sons[indice];
-        sons = p_tree->sons;
+        p_trie = sons[indice];
+        sons = p_trie->sons;
         if (sons == NULL) {
-            ERR("New Sons[indice] = NULL, getting tree->sons failed");
+            ERR("New Sons[indice] = NULL, getting trie->sons failed");
             return -5;
         }
 
@@ -123,43 +123,43 @@ int tree_find_word(tree_t tree, char* str) {
     return 1;
 }
 
-tree_t tree_delete(tree_t tree) {
+trie_t trie_delete(trie_t trie) {
 
-    if (tree == NULL) {
+    if (trie == NULL) {
         ERR("Tree = NULL");
         return NULL;
     }
 
-    //if (tree->sons == NULL) {
+    //if (trie->sons == NULL) {
     //    ERR("Tree->sons = NULL");
-    //    return tree;
+    //    return trie;
     //}
 
-    tree_t p_tree = NULL;
-    tree_t* sons = tree->sons;
+    trie_t p_trie = NULL;
+    trie_t* sons = trie->sons;
     for (int i = 0; i<ASIZE; i++) {
         
         int sons_i_exist = (sons[i] != NULL);
         if (sons_i_exist) {
-            p_tree = tree_delete(sons[i]);
-            if (p_tree != NULL) {
-                ERR("tree_delete failed");
-                return tree;
+            p_trie = trie_delete(sons[i]);
+            if (p_trie != NULL) {
+                ERR("trie_delete failed");
+                return trie;
             }
         }
     }
-    free(tree);
-    tree = NULL;
+    free(trie);
+    trie = NULL;
     return NULL;
 }
 
-void tree_print(tree_t tree, size_t index) {
+void trie_print(trie_t trie, size_t index) {
 
-    if (tree == NULL) {
+    if (trie == NULL) {
         return;
     }
     for (int i = 0; i < ASIZE; i++) {
-        tree_t p_son = (tree->sons)[i];
+        trie_t p_son = (trie->sons)[i];
         if (p_son != NULL) {
 
             char c = 'a' + i;
@@ -169,12 +169,51 @@ void tree_print(tree_t tree, size_t index) {
             }
 
             if (i == 26) {
+                //printf("0, %p\n", trie);
                 printf("0\n");
             }
             else {
+                //printf("%c, %p\n", c, trie);
                 printf("%c\n", c);
             }
-            tree_print(p_son, index + 1);
+            trie_print(p_son, index + 1);
         }
     }
+}
+
+
+void trie_print2(trie_t trie) {
+    trie_print(trie, 0);
+}
+
+static void trie_print_test(trie_t trie, size_t index) {
+
+    if (trie == NULL) {
+        return;
+    }
+    for (int i = 0; i < ASIZE; i++) {
+        trie_t p_son = (trie->sons)[i];
+        if (p_son != NULL) {
+
+            char c = 'a' + i;
+            
+            for (size_t j = 0; j < index; j++) {
+                printf("| - ");
+            }
+
+            if (i == 26) {
+                printf("0, %p\n", trie);
+                //printf("0\n");
+            }
+            else {
+                printf("%c, %p\n", c, trie);
+                //printf("%c\n", c);
+            }
+            trie_print_test(p_son, index + 1);
+        }
+    }
+}
+
+void trie_print_test2(trie_t trie) {
+    trie_print_test(trie, 0);
 }

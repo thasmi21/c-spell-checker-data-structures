@@ -5,53 +5,53 @@
 
 #include "../include/tree_trie.h"
 
-int test_tree_new() {
+int test_trie_new() {
 
-    fprintf(stderr, "\n## Test of the tree_new() function\n");
+    fprintf(stderr, "\n## Test of the trie_new() function\n");
 
     fprintf(stderr, "<= Test : We try valid parameters, must return not errors\n");
 
-    tree_t tree = tree_new();
-    assert(tree != NULL);
+    trie_t trie = trie_new();
+    assert(trie != NULL);
     
     for (int i = 0; i < ASIZE; i++) {
-        tree_t p_son = (tree->sons)[i];
+        trie_t p_son = (trie->sons)[i];
         assert(p_son == NULL);
     }
 
-    tree_print(tree, 0);
+    trie_print(trie, 0);
 
-    tree = tree_delete(tree);
-    assert(tree == NULL);
+    trie = trie_delete(trie);
+    assert(trie == NULL);
 
 
     fprintf(stderr, "=> Test passed with success\n");
     return 1;
 }
 
-int test_tree_add_word() {
+int test_trie_add_word() {
 
-    fprintf(stderr, "\n## Test of the tree_add_word function\n");
+    fprintf(stderr, "\n## Test of the trie_add_word function\n");
 
-    tree_t tree = tree_new();
-    assert(tree != NULL);
+    trie_t trie = trie_new();
+    assert(trie != NULL);
 
     fprintf(stderr, "<= Test : We try invalids parameters, must return errors\n");
 
-    int rst = tree_add_word(NULL, "abcd");
+    int rst = trie_add_word(NULL, "abcd");
     assert(rst == -1);
 
-    rst = tree_add_word(tree, NULL);
+    rst = trie_add_word(trie, NULL);
     assert(rst == -2);
 
     fprintf(stderr, "=> Test passed with success\n");
 
     fprintf(stderr, "<= Test : We try valid parameters, must return not errors\n");
     
-    rst = tree_add_word(tree, "abcd");
+    rst = trie_add_word(trie, "abcd");
     assert(rst == 1);
 
-    tree_t* p_sons = tree->sons;
+    trie_t* p_sons = trie->sons;
     for (int i = 1; i < ASIZE; i++) {
         if (i == 0) {
             assert(p_sons[i] != NULL);
@@ -91,118 +91,118 @@ int test_tree_add_word() {
         }
     }
 
-    tree_print(tree, 0);
+    trie_print(trie, 0);
 
-    rst = tree_add_word(tree, "abcd");
+    rst = trie_add_word(trie, "abcd");
     assert(rst == 1);
 
-    rst = tree_add_word(tree, "abce");
+    rst = trie_add_word(trie, "abce");
     assert(rst == 1);
 
-    rst = tree_add_word(tree, "bbcd");
+    rst = trie_add_word(trie, "bbcd");
     assert(rst == 1);
 
-    rst = tree_add_word(tree, "ab");
+    rst = trie_add_word(trie, "ab");
     assert(rst == 1);
-    tree_print(tree, 0);
+    trie_print(trie, 0);
 
 
-    tree = tree_delete(tree);
-    assert(tree == NULL);
+    trie = trie_delete(trie);
+    assert(trie == NULL);
 
     fprintf(stderr, "=> Test passed with success\n");
     return 1;
 }
 
-int test_tree_find_word() {
+int test_trie_find_word() {
 
-    tree_t tree = tree_new();
-    assert(tree != NULL);
+    trie_t trie = trie_new();
+    assert(trie != NULL);
 
-    int rst = tree_add_word(tree, "abcd");
+    int rst = trie_add_word(trie, "abcd");
     assert(rst == 1);
 
-    fprintf(stderr, "\n## Test of the tree_find_tree function\n");
+    fprintf(stderr, "\n## Test of the trie_find_trie function\n");
 
     fprintf(stderr, "<= Test : We try invalids parameters, must return errors\n");
 
-    rst = tree_find_word(NULL, "abc");
+    rst = trie_find_word(NULL, "abc");
     assert(rst == -1);
 
-    rst = tree_find_word(tree, NULL);
+    rst = trie_find_word(trie, NULL);
     assert(rst == -2);
 
     fprintf(stderr, "=> Test passed with success\n");
 
     fprintf(stderr, "<= Test : We try valid parameters, must return not errors\n");
 
-    rst = tree_find_word(tree, "abcd");
+    rst = trie_find_word(trie, "abcd");
     assert(rst == 1 && "abcd must be found");    
     
-    rst = tree_find_word(tree, "abc");
+    rst = trie_find_word(trie, "abc");
         printf("rst = %d\n", rst);
 
     assert(rst == 0 && "abc must not be found");
 
-    rst = tree_find_word(tree, "abce");
+    rst = trie_find_word(trie, "abce");
     assert(rst == 0 && "abce must not be found");
 
-    rst = tree_find_word(tree, "abcde");
+    rst = trie_find_word(trie, "abcde");
     assert(rst == 0  && "abcde must not be found");
 
-    tree = tree_delete(tree);
-    assert(tree == NULL);
+    trie = trie_delete(trie);
+    assert(trie == NULL);
 
     fprintf(stderr, "=> Test passed with success\n");
     return 1;
 }
 
-int test_tree_delete() {
+int test_trie_delete() {
 
-    fprintf(stderr, "\n## Test of the tree_delete function\n");
+    fprintf(stderr, "\n## Test of the trie_delete function\n");
 
     fprintf(stderr, "<= Test : We try invalids parameters, must return errors\n");
 
-    tree_t tree = tree_delete(NULL);
-    assert(tree == NULL);
+    trie_t trie = trie_delete(NULL);
+    assert(trie == NULL);
 
     fprintf(stderr, "=> Test passed with success\n");
 
     fprintf(stderr, "<= Test : We try valid parameters, must return not errors\n");
 
-    tree = tree_new();
-    assert(tree != NULL);
+    trie = trie_new();
+    assert(trie != NULL);
 
-    int rst = tree_add_word(tree, "abcd");
+    int rst = trie_add_word(trie, "abcd");
     assert(rst == 1);
 
-    tree = tree_delete(tree);
-    assert(tree == NULL);
+    trie = trie_delete(trie);
+    assert(trie == NULL);
 
     fprintf(stderr, "=> Test passed with success\n");
     return 1;
 }
 
-int test_tree_print() {
+int test_trie_print() {
 
-    fprintf(stderr, "\n## Test of the tree_print function\n");
+    fprintf(stderr, "\n## Test of the trie_print function\n");
 
     fprintf(stderr, "<= Test : We try invalids parameters, must return errors\n");
 
-    tree_print(NULL, 0);
+    trie_print(NULL, 0);
 
     fprintf(stderr, "=> Test passed with success\n");
 
-    tree_t tree = tree_new();
-    assert(tree != NULL);
+    trie_t trie = trie_new();
+    assert(trie != NULL);
 
-    int rst = tree_add_word(tree, "abcd");
+    int rst = trie_add_word(trie, "abcd");
     assert(rst == 1);
 
-    tree_print(NULL, 0);
+    trie_print(NULL, 0);
 
-    tree = tree_delete(tree);
-    assert(tree == NULL);
+    trie = trie_delete(trie);
+    assert(trie == NULL);
 
     fprintf(stderr, "<= Test : We try valid parameters, must return not errors\n");
 
@@ -227,11 +227,11 @@ int test_() {
 
 int main() {
 
-    test_tree_new();
-    test_tree_add_word();
-    test_tree_delete();
-    test_tree_print();
-    test_tree_find_word();
+    test_trie_new();
+    test_trie_add_word();
+    test_trie_delete();
+    test_trie_print();
+    test_trie_find_word();
 
     fprintf(stderr, "Tests of file 08_tree_trie.c passed with success\n");
     return EXIT_SUCCESS;
