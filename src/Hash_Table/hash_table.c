@@ -1,12 +1,15 @@
 #include <stdio.h>
+#include <string.h>
 #include <assert.h>
 #include <stdlib.h>
 
-#include "../include/hash_table.h"
-#include "../include/vector.h"
-#include "../include/list.h"
-#include "../include/cell_wf.h"
-#include "../include/cell.h"
+#include "hash_table.h"
+#include "vector.h"
+#include "list.h"
+#include "cell_wf.h"
+#include "cell.h"
+
+#define ERR(msg) fprintf(stderr, "Error: %s\n", msg)
 
 hash_t hash_new(size_t n, size_t (*hachage)(void * ),
     void* (*delete_key)(void*), void* (*delete_data)(void*),
@@ -104,6 +107,7 @@ hash_t hash_delete(hash_t table) {
         return NULL;
     }
 
+    ERR("lol");
     table->data = vect_delete(table->data);
     assert(table->data == NULL);
 
@@ -372,6 +376,18 @@ size_t hash_indice(void* key, hash_t table) {
     return indice;
 }
 
-//int hash_new_length(int sens, hash_t table) {
-//}
+int hash_new_length(int sens, hash_t table) {
+
+    if (sens != 1 && sens != -1) {
+        ERR("Sens must be -1 or 1");
+        return -1;
+    }
+
+    if (table == NULL) {
+        ERR("Hash_table is NULL");
+        return -2;
+    }
+
+    return 1;
+}
 

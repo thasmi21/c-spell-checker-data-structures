@@ -2,8 +2,8 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "../include/list.h"
-#include "../include/link.h"
+#include "list.h"
+#include "link.h"
 
 static void print_char(char* c) {
     printf("%c", *c);

@@ -2,7 +2,10 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "../include/generic_table.h"
+#include "generic_table.h"
+
+#define ERR(msg) fprintf(stderr, "Error in generic_table.c: %s\n", msg)
+
 
 table_t table_new(size_t n, void (*print_data)(void*), void* (*delete_data)(void*), int (*equal_data)(void*, void*)) {
 
@@ -256,6 +259,7 @@ table_t table_delete(table_t tab) {
 
     size_t max_size = tab->max_size;
 
+    ERR("lol\n");
     if (tab->delete_data == NULL) {
         printf("Error in generic_table.c/table_delete: delete_data is NULL, while tab is not MAJOR BUG\n");
         exit(EXIT_FAILURE);
@@ -270,6 +274,7 @@ table_t table_delete(table_t tab) {
                     p_data[j] = NULL;
                 }
             }
+            ERR("lol2\n");
 
             assert(p_data[i] != NULL);
             assert(tab != NULL);
@@ -277,9 +282,12 @@ table_t table_delete(table_t tab) {
             assert(tab->data != NULL);
 
             p_data[i] = tab->delete_data(p_data[i]);
+            ERR("lol3\n");
+
         }
         assert(p_data[i] == NULL);
     }
+    ERR("lila");
     free(tab->data);
     free(tab);
     return NULL;

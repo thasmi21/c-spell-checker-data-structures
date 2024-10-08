@@ -2,12 +2,12 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "../include/cell.h"
-#include "../include/hash_table.h"  
-#include "../include/vector.h"
-#include "../include/tree_trie.h"
-#include "../include/key.h"
-#include "../include/trie_compress.h"
+#include "cell.h"
+#include "hash_table.h"  
+#include "vector.h"
+#include "tree_trie.h"
+#include "key.h"
+#include "trie_compress.h"
 
 #define ERR(msg) printf("Error in trie_compress.c/%s: %s\n", __func__, msg)
 

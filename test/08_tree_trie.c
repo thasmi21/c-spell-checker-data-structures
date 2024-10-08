@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <string.h> 
 
-#include "../include/tree_trie.h"
+#include "tree_trie.h"
 
 int test_trie_new() {
 

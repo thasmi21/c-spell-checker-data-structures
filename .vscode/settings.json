@@ -67,6 +67,7 @@
     "stdio.h": "c",
     "initializer_list": "c",
     "utility": "c",
-    "cell_wf.h": "c"
+    "cell_wf.h": "c",
+    "dico_utils.h": "c"
   }
 }

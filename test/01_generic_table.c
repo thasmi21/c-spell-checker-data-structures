@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "../include/generic_table.h"
+#include "generic_table.h"
 
 static void print_double(double* d) {
 

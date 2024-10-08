@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../include/hash_table.h"
+#include "hash_table.h"
 
 #define ERR(msg) printf("Error in patricia_compress.c/%s: %s\n", __func__, msg)
 #define LINE_SIZE 256

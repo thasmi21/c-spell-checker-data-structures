@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <string.h> 
 
-#include "../include/tree_patricia.h"
+#include "tree_patricia.h"
 
 int test_radix_new() {
 

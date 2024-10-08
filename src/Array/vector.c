@@ -2,8 +2,10 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "../include/vector.h"
-#include "../include/generic_table.h"
+#include "vector.h"
+#include "generic_table.h"
+
+#define ERR(msg) fprintf(stderr, "Error in vector.c: %s\n", msg)
 
 vect_t vect_new(size_t n,void (*print_data)(void*), void* (*delete_data)(void*),int (*equal_data)(void*,void*)) {
 
@@ -52,6 +54,7 @@ void vect_printf(vect_t vec) {
 }
 
 vect_t vect_delete(vect_t vec) {
+    ERR("lol");
     vec = table_delete((table_t)vec);
     assert(vec == NULL);
     return vec;

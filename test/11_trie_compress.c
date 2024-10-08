@@ -3,12 +3,12 @@
 #include <assert.h>
 #include <string.h> 
 
-#include "../include/cell.h"
-#include "../include/hash_table.h"
-#include "../include/tree_trie.h"
-#include "../include/vector.h"
-#include "../include/trie_compress.h"
-#include "../include/key.h"
+#include "cell.h"
+#include "hash_table.h"
+#include "tree_trie.h"
+#include "vector.h"
+#include "trie_compress.h"
+#include "key.h"
 
 #define ENTERING() fprintf(stderr, "\n## Enterring in %s function\n", __func__);
 #define VALID()    fprintf(stderr, "<= Test : We try valid parameters, must return not errors\n");

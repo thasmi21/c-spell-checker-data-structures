@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <string.h>
 
-#include "../include/cell.h"
+#include "cell.h"
 
 void print_str(char* s) {
     printf("str = %s", s);

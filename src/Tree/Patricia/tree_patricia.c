@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../include/tree_patricia.h"
+#include "tree_patricia.h"
 
 #define ERR(msg) printf("Error in tree_patricia.c/%s: %s\n", __func__, msg)
 

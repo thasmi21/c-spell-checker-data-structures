@@ -3,8 +3,8 @@
 #include <assert.h>
 #include <string.h>
 
-#include "../include/cell.h"
-#include "../include/cell_wf.h"
+#include "cell.h"
+#include "cell_wf.h"
 
 void print_str(char* s) {
     printf("str = %s", s);

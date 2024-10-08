@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "../include/link.h"
+#include "link.h"
 
 static char* delete_char(char* c) {
 

@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include "../include/cell_wf.h"
-#include "../include/cell.h"
+#include "cell_wf.h"
+#include "cell.h"
 
 cell_wf_t cell_wf_new(void* key, void* data, size_t hashcode, void (*print_data)(void*),
     void (*print_key)(void*), void* (*delete_data)(void*),void*(*delete_key)(void*),

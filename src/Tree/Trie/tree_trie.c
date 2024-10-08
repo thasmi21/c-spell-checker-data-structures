@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include "../include/tree_trie.h"
+#include "tree_trie.h"
 
 #define ERR(msg) printf("Error in tree_trie.c/%s: %s\n", __func__, msg)
 

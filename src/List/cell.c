@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include "../include/cell.h"
+#include "cell.h"
 
 cell_t cell_new(void* key, void* data, size_t hashcode) {
 

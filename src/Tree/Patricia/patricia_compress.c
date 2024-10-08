@@ -2,12 +2,12 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <../include/cell.h>
-#include <../include/hash_table.h>  
-#include <../include/tree_patricia.h>
-#include <../include/vector.h>
-#include <../include/patricia_compress.h>
-#include <../include/key.h>
+#include "cell.h"
+#include "hash_table.h"  
+#include "tree_patricia.h"
+#include "vector.h"
+#include "patricia_compress.h"
+#include "key.h"
 
 
 #define ERR(msg) printf("Error in patricia_compress.c/%s: %s\n", __func__, msg)

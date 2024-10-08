@@ -13,10 +13,10 @@ ASAN_GDB=
 # My syntax checker wants access to my compilation flags too, so:
 include Makefile.inc
 
-CFLAGS_DBG=$(CFLAGS) -gdwarf-4 -ggdb3 -Werror
-CFLAGS_PERF=$(CFLAGS) -O3
+CFLAGS_DBG=$(CFLAGS) -gdwarf-4 -ggdb3 -Werror -I./include
+CFLAGS_PERF=$(CFLAGS) -O3 -I./include
 
-LDLIBS+=-lm
+LDLIBS+=-lm 
 
 # https://stackoverflow.com/a/18258352
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))

@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include "../include/hash_table.h"
+#include "hash_table.h"
 
 #include <string.h>
 
-#include "../include/list.h"
-#include "../include/cell.h"
-#include "../include/cell_wf.h"
+#include "list.h"
+#include "cell.h"
+#include "cell_wf.h"
 
 void print_str(char* s) {
     printf("str = %s", s);

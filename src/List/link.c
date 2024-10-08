@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include "../include/link.h"
+#include "link.h"
 
 link_t link_new(void) {
     return NULL;

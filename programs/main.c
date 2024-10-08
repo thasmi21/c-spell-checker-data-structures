@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../include/dico_utils.h"
+#include "dico_utils.h"
 
-#define ERR(msg) fprintf(stderr, "Error: %s\n", msg)
+#define ERR(msg) fprintf(stderr, "Error in main.c: %s\n", msg)
 
 int main(int argc, char* argv[]) {
 

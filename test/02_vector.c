@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "../include/vector.h"
+#include "vector.h"
 
 static void print_char(char* c) {
 
