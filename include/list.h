@@ -63,4 +63,5 @@ list_t list_link_remove(list_t list, link_t link);
 //To test
 int list_is_equal(list_t list1, list_t list2);
 
+list_t list_fusion(list_t list_dst, list_t list_src);
 #endif

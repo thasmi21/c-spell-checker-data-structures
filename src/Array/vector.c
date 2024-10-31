@@ -54,7 +54,6 @@ void vect_printf(vect_t vec) {
 }
 
 vect_t vect_delete(vect_t vec) {
-    ERR("lol");
     vec = table_delete((table_t)vec);
     assert(vec == NULL);
     return vec;
@@ -68,6 +67,7 @@ int vect_find(void* element, vect_t vec) {
     assert(vec->equal_data != NULL);
 
     size_t max_size = vec->max_size;
+    table_printf((table_t)vec);
     for (size_t i = 0; i<max_size; i++) {
         void* p_i = (vec->data)[i];
         if (p_i != NULL) {

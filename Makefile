@@ -62,6 +62,13 @@ tests_oracle: $(TESTS_ORACLE_REC)
 tests_oracle/% : tests_oracle/%.o $(OBJ) $(HEADERS)
 	$(CC) $(LDFLAGS) $(word 1, $^) $(OBJ) -o $@ $(LDLIBS)
 
+testDico1H: programs/main
+	./programs/main ./dico_txt/dico1.txt -h
+
+testVDico1H: programs/main
+	valgrind ./programs/main ./dico_txt/dico1.txt -h
+
+
 help :
 	@echo ''
 	@echo "  \e[3m\e[31m>> A Fast Workflow for C on GNU/Linux\e[m with \e[1m\e[34moptions\e[m, sanitizers,\n     and even some \e[2m\e[37mless useful functions\e[m."

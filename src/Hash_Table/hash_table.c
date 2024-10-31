@@ -9,7 +9,11 @@
 #include "cell_wf.h"
 #include "cell.h"
 
-#define ERR(msg) fprintf(stderr, "Error: %s\n", msg)
+#define ERR(msg) fprintf(stderr, "Error in hash_table.c : %s\n", msg)
+
+int compare_wrapper(cell_wf_t c1, cell_wf_t c2) {
+    return cell_wf_compare_key(c1, c2, (void*)0x1);
+}
 
 hash_t hash_new(size_t n, size_t (*hachage)(void * ),
     void* (*delete_key)(void*), void* (*delete_data)(void*),
@@ -95,11 +99,13 @@ hash_t hash_new(size_t n, size_t (*hachage)(void * ),
     }
 
     for (size_t i = 0; i<n; i++) { //Do not use this function in list
-        p_data[i] = list_new((void (*)(void *))cell_wf_print, (void *(*)(void *))cell_wf_delete, (int (*)(void *, void *)) cell_wf_compare_key);
+        p_data[i] = list_new((void (*)(void *))cell_wf_print, (void *(*)(void *))cell_wf_delete, (int (*)(void *, void *)) compare_wrapper);
     }
 
     return table;
 }
+
+
 
 hash_t hash_delete(hash_t table) {
 
@@ -107,7 +113,6 @@ hash_t hash_delete(hash_t table) {
         return NULL;
     }
 
-    ERR("lol");
     table->data = vect_delete(table->data);
     assert(table->data == NULL);
 
@@ -186,7 +191,6 @@ int hash_put(void* key, void* data, hash_t table) {
     }
 
     p_list = list_add_first(p_list, p_cell_wf);
-
     if (p_list == NULL) {
         printf("Error in hash_table.c/hash_put: p_list = NULL, list_add_first failed\n");
         return -8;
@@ -225,7 +229,9 @@ cell_t hash_get_value(void* key, hash_t table) {
     list_t p_list = NULL;
     link_t link = NULL;
 
-    size_t indice = table->hachage(key)%(table->size);
+    size_t hashcode = table->hachage(key);
+    size_t indice = hashcode%(table->size);
+
     p_list = p_vec_data[indice];
     if(p_list == NULL) {
         printf("Error in hash_table.c/hash_get_value: p_list == NULL\n");
@@ -243,6 +249,7 @@ cell_t hash_get_value(void* key, hash_t table) {
         printf("Error in hash_table.c/hash_get_value: p_cell_wf = NULL, cell_wf_wrapper failed\n");
         return NULL;
     }
+
     link = list_find(p_list, p_cell_wf);
 
     if (link != NULL) {
@@ -388,6 +395,66 @@ int hash_new_length(int sens, hash_t table) {
         return -2;
     }
 
+    size_t size = table->size;
+
+    if (table->data == NULL) {
+        ERR("table->data = NULL");
+        return -3;
+    }
+
+    vect_t p_vect = table->data;
+    list_t* p_data = (list_t*)p_vect->data;
+
+    if (sens == 1) {
+        size_t new_size = 2 * size;
+        table->data = realloc(table->data, sizeof(*(table->data)) * new_size);
+        table->size = new_size;
+
+        if (table->data == NULL) {
+            ERR("Realoc failed");
+            return -4;
+        }
+
+        link_t link = NULL;
+        for (size_t i = 0; i < size; i++) {
+
+            if (p_data[i] == NULL) {
+                continue;
+            }
+            
+            link = list_first(p_data[i]);
+            if (link == NULL) {
+                ERR("list_first failed");
+                return -5;
+            }
+
+            cell_wf_t cell_wf = link->data;
+            if (cell_wf == NULL) {
+                ERR("cell_wf = NULL");
+                return -6;
+            }
+
+            cell_t cell = cell_wf->cell;
+            if (cell == NULL) {
+                ERR("cell = NULL");
+                return -7;
+            }
+            
+            char* key = (char*)cell->key;
+            if (key == NULL) {
+                ERR("key = NULL");
+                return -8;
+            }
+
+            size_t hash = table->hachage(key);
+            size_t indice = hash%new_size;
+            p_data[indice] = list_add_first(p_data[indice], cell_wf);
+            p_data[i] = list_del_first(p_data[i]);
+
+        }
+
+
+    }
     return 1;
 }
 

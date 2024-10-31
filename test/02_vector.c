@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
-
+#include <string.h>
 #include "vector.h"
 
 static void print_char(char* c) {
@@ -340,6 +340,78 @@ static int test_remove_at() {
     return 1;
 }
 
+static void generate_random_string(char *str, size_t min_length, size_t max_length) {
+    const char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    size_t charset_size = sizeof(charset) - 1; // Exclude the null terminator
+
+    // Generate a random length between min_length and max_length
+    size_t length = min_length + rand() % (max_length - min_length + 1);
+
+    for (size_t i = 0; i < length; i++) {
+        int key = rand() % charset_size;
+        str[i] = charset[key];
+    }
+    str[length] = '\0'; // Null-terminate the string
+}
+
+static void print_str(char* s) {
+    printf("str = %s", s);
+}
+
+
+static char* delete_str(char* str) {
+
+    if (str == NULL) {
+        return NULL;
+    }
+
+    free(str);
+    str = NULL;
+    return str;
+}
+
+static int compare_str(char* s1, char* s2) {
+    
+    if (s1 == NULL) {
+        printf("Error in 05_cell.c/compare_str: s1 == NULL");
+        return -1;
+    }
+
+    if (s2 == NULL) {
+        printf("Error in 05_cell.c/compare_str: s2 == NULL");
+        return -2;
+    }
+
+    int rst = strcmp(s1, s2);
+    return (rst == 0);
+}
+
+static int test_random() {
+
+    fprintf(stderr, "\n## Test of the test_random function\n");
+
+    fprintf(stderr, "<= Test : We try valid parameters, must return not errors\n");
+
+    vect_t vec = vect_new(10, (void (*)(void *))print_str, 
+                   (void (*))delete_str, 
+                   (int (*)(void *, void *))compare_str);
+
+
+    for (int i = 0; i<100; i++) {
+        char* data = malloc(21* sizeof(char));
+        generate_random_string(data, 10, 20);
+        int rst = vect_append(data, vec);
+        assert(rst == 1);
+
+    }
+
+    vec = vect_delete(vec);
+    assert(vec == NULL);
+
+    fprintf(stderr, "=> Test passed with success\n");
+    return 1;
+}
+
 int main() {
     test_vect_new();
     test_vect_append();
@@ -347,6 +419,7 @@ int main() {
     test_vect_find();
     test_vect_lookup();
     test_remove_at();
+    test_random();
 
     fprintf(stderr, "Tests of file 02_vector.c passed with success\n");
     return EXIT_SUCCESS;

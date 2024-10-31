@@ -5,6 +5,9 @@
 #include "cell_wf.h"
 #include "cell.h"
 
+#define ERR(msg) fprintf(stderr, "Error in cell_wf.c: %s\n", msg)
+
+
 cell_wf_t cell_wf_new(void* key, void* data, size_t hashcode, void (*print_data)(void*),
     void (*print_key)(void*), void* (*delete_data)(void*),void*(*delete_key)(void*),
     int(*compare_data)(void*, void*), int (*compare_key)(void*, void*)) {
@@ -138,7 +141,6 @@ void cell_wf_print(cell_wf_t cell_wf) {
 }
 
 cell_wf_t cell_wf_delete(cell_wf_t cell_wf) {
-
     if (cell_wf == NULL) {
         return NULL;
     }
@@ -157,6 +159,7 @@ cell_wf_t cell_wf_delete(cell_wf_t cell_wf) {
     assert(cell_wf->cell == NULL);
 
     free(cell_wf);
+
     cell_wf = NULL;
     return NULL;
 }

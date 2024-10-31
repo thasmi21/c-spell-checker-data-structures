@@ -59,7 +59,7 @@ hash_t hash_dico_controler(FILE* fp) {
         return NULL;
     }
 
-    hash_t h_tab = hash_new(100, (size_t (*)(void *))hash_string, (void *(*)(void *))delete_str, (void *(*)(void *))0x1,
+    hash_t h_tab = hash_new(1000, (size_t (*)(void *))hash_string, (void *(*)(void *))delete_str, (void *(*)(void *))0x1,
     (int (*)(void *, void *))str_compare, (int (*)(void *, void *))0x1, (void (*)(void *))print_str, (void (*)(void *))0x1);
     //0X1 IS FOR USELLESS FUNCTION, BUT NULL IS INVALID (will not code them just for fun, the best code to debug is no code)
 
@@ -90,8 +90,10 @@ int hash_dico_find(char* key, hash_t dico) {
     }
 
     cell_t cell = hash_get_value(key, dico);
-
+    printf("lol\n");
     if (cell == NULL) {
+            printf("lolEchec\n");
+
         return 0;
     }
     else {

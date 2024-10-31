@@ -5,6 +5,12 @@
 #include "list.h"
 #include "link.h"
 
+#include "cell_wf.h"
+
+
+#define ERR(msg) fprintf(stderr, "Error in list.c : %s\n", msg)
+
+
 list_t list_new(void (*print_data)(void*),void* (*delete_data)(void*), int (*equal_data)(void*,void*)) {
 
     if (print_data == NULL) {
@@ -324,7 +330,6 @@ link_t list_find(list_t list, void* elem) {
         printf("Error in list.c/list_find: list->equal_data == NULL\n");
         return NULL;
     }
-
     while (!link_is_empty(p_link)) {
 
         if (p_link->data == NULL || elem == NULL || list->equal_data == NULL) {

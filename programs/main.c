@@ -98,5 +98,6 @@ int main(int argc, char* argv[]) {
     }
 
     fclose(fp);
+    printf("FIN\n");
     return 0;  // Success
 }

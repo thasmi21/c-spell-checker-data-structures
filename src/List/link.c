@@ -166,3 +166,19 @@ link_t link_delete(link_t link, void* (*delete)(void*)) {
 
     return NULL;
 }
+
+//To test
+link_t link_fusion(link_t link_dst, link_t link_src) {
+
+    if (link_dst == NULL) {
+        return link_src;
+    }
+
+    link_t p_link = link_dst;        
+    while (p_link->next != NULL) {
+        p_link = p_link->next;
+    }
+
+    p_link->next = link_src;
+    return link_dst;
+}

@@ -4,6 +4,8 @@
 
 #include "cell.h"
 
+#define ERR(msg) fprintf(stderr, "Error in cell.c: %s\n", msg)
+
 cell_t cell_new(void* key, void* data, size_t hashcode) {
 
     if (key == NULL) {
@@ -37,12 +39,12 @@ void cell_print(cell_t cell, void (*print_data)(void*), void (*print_key)(void*)
         return;
     }
 
-    if (print_data == NULL) {
+    if (print_data == NULL ) {
         printf("Error in cell.c/cell_print: print_data is NULL\n");
         return;
     }
 
-    if (print_key == NULL) {
+    if (print_key == NULL || print_key == (void*)0x1) {
         printf("Error in cell.c/cell_print: print_key is NULL\n");
         return;
     }
@@ -71,10 +73,16 @@ void cell_print_for_wf(cell_t cell, void (*print_data)(void*), void (*print_key)
 
     else {
         printf("Cell {key = ");
+        assert(cell != NULL);
+        assert(cell->key != NULL);
         print_key(cell->key);
         printf(", data =");
-
-        print_data(cell->data);
+        if (cell->data != (void*)0x1) {
+            print_data(cell->data);
+        }
+        else {
+            printf("0x1");
+        }
 
         printf(", hashcode = %zu }", cell->hashcode);
     }
@@ -104,10 +112,18 @@ cell_t cell_delete(cell_t cell, void* (*delete_data)(void*), void*(*delete_key)(
         assert(cell->data == NULL);
     }
 
+    if (delete_key == NULL || delete_key == (void*)0x1) {
+        printf("azerrty\n");
+    }
+
+    assert(cell != NULL);
+    assert(cell->key != NULL);
     cell->key = delete_key(cell->key);
+
     assert(cell->key == NULL);
 
     free(cell); 
+
     return NULL;
 }
 
@@ -164,18 +180,12 @@ int cell_compare_key(cell_t cell1, cell_t cell2, int (*compare_key)(void*, void*
         return -2;
     }
 
-    if (compare_key == NULL) {
-        printf("Error in cell.c/compare_cell: compare_key is NULL\n");
+    if (compare_key == NULL || compare_key == (void*)0x1) {
+        printf("Error in cell.c/compare_cell_key: compare_key is NULL\n");
         return -3;
     }
 
     int rst = compare_key(cell1->key, cell2->key);
-
-    if (rst < 0) {
-        printf("Error in cell.c/compare_cell: rst1 < 0\n");
-        return -4;
-    }
-
     if (rst == 1) {
         return 1;
     }

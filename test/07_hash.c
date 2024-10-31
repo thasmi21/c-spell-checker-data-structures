@@ -438,6 +438,44 @@ int test_hash_indice() {
     return 1;
 }
 
+static void generate_random_string(char *str, size_t min_length, size_t max_length) {
+    const char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    size_t charset_size = sizeof(charset) - 1; // Exclude the null terminator
+
+    // Generate a random length between min_length and max_length
+    size_t length = min_length + rand() % (max_length - min_length + 1);
+
+    for (size_t i = 0; i < length; i++) {
+        int key = rand() % charset_size;
+        str[i] = charset[key];
+    }
+    str[length] = '\0'; // Null-terminate the string
+}
+
+static int test_random() {
+
+    fprintf(stderr, "\n## Test of the test_random function\n");
+
+    fprintf(stderr, "<= Test : We try valid parameters, must return not errors\n");
+
+    hash_t table = hash_new_wrapper();
+
+    for (int i = 0; i<1000; i++) {
+        char* key = malloc(21* sizeof(char));
+        char* data = malloc(21* sizeof(char));
+        generate_random_string(key, 10, 20);
+        generate_random_string(data, 10, 20);
+        int rst = hash_put(key, data, table);
+        assert(rst == 1);
+    }
+
+    table = hash_delete(table);
+    assert(table == NULL);
+
+    fprintf(stderr, "=> Test passed with success\n");
+    return 1;
+}
+
 int test_() {
 
     fprintf(stderr, "\n## Test of the  function\n");
@@ -461,6 +499,7 @@ int main() {
     test_hash_print();
     test_hash_delete();
     test_hash_indice();
+    test_random();
 
     fprintf(stderr, "Tests of file 07_hash.c passed with success\n");
     return EXIT_SUCCESS;

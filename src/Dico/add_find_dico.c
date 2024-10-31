@@ -4,7 +4,7 @@
 
 #include "hash_table.h"
 
-#define ERR(msg) printf("Error in patricia_compress.c/%s: %s\n", __func__, msg)
+#define ERR(msg) printf("Error in add_find_dico.c/%s: %s\n", __func__, msg)
 #define LINE_SIZE 256
 
 void* add_dico_from_file(FILE* fp, void* dico, void* (*dico_add)(char*, void*)) {
@@ -25,19 +25,25 @@ void* add_dico_from_file(FILE* fp, void* dico, void* (*dico_add)(char*, void*)) 
         ERR("dico_add = NULL\n");
         return NULL;
     }
-
+    //int count = 0;
     // Read and process each line of the file
     while (fgets(line, sizeof(line), fp)) {
         // Check if the line was truncated (absence of '\n' in the buffer and not at EOF)
-        if (line[strlen(line) - 1] != '\n' && !feof(fp)) {
+        int n = strlen(line);
+        if (line[n - 1] != '\n' && !feof(fp)) {
             fprintf(stderr, "Line too long, it was truncated: %s\n", line);
             // Ignore the rest of the line if it is too long
             int ch;
             while ((ch = fgetc(fp)) != '\n' && ch != EOF);  // Read until end of line
         }
 
+        if (n > 0 && line[n - 1] == '\n') {
+            line[n - 1] = '\0';
+        }
         // Call the callback function to add the line to the dictionary
-        void* result = dico_add(line, dico);
+        char* new_line = malloc(LINE_SIZE * sizeof(char));
+        strcpy(new_line, line);
+        void* result = dico_add(new_line, dico);
         if (result == NULL) {
             ERR("Failed to add to dictionary\n");
             return NULL;
@@ -45,7 +51,7 @@ void* add_dico_from_file(FILE* fp, void* dico, void* (*dico_add)(char*, void*)) 
         dico = result; // Update dictionary if needed
 
         // Optionally display the processed line
-        printf("%s", line);
+        printf("%s\n", line);
     }
 
     // Check if there was an error reading
