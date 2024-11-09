@@ -267,29 +267,25 @@ table_t table_delete(table_t tab) {
         exit(EXIT_FAILURE);
     }
 
-
     for (size_t i = 0; i<max_size; i++) {
 
         if (p_data[i] != NULL) {
-            for (size_t j = i+1; j<max_size; j++) {
-                if (p_data[i] == p_data[j]) {
-                    p_data[j] = NULL;
-                }
-            }
 
             assert(p_data[i] != NULL);
             assert(tab != NULL);
 
             assert(tab->data != NULL);
             assert(p_data[i] != NULL);
-
+            
             p_data[i] = tab->delete_data(p_data[i]);
 
         }
         assert(p_data[i] == NULL);
     }
+
     free(tab->data);
     free(tab);
+
     return NULL;
 }
 

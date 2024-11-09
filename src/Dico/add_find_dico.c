@@ -7,7 +7,7 @@
 #define ERR(msg) printf("Error in add_find_dico.c/%s: %s\n", __func__, msg)
 #define LINE_SIZE 256
 
-void* add_dico_from_file(FILE* fp, void* dico, void* (*dico_add)(char*, void*)) {
+void* add_dico_from_file(FILE* fp, void* dico, void* (*dico_add)(char*, void*), int max) {
     char line[LINE_SIZE];  // Max line size (to be adjusted as needed)
 
     // Check if input are valid
@@ -25,9 +25,19 @@ void* add_dico_from_file(FILE* fp, void* dico, void* (*dico_add)(char*, void*)) 
         ERR("dico_add = NULL\n");
         return NULL;
     }
-    //int count = 0;
+    
+    //while (fgets(line, sizeof(line), fp) && count++ <= 100000) {
+    int count = 0;
     // Read and process each line of the file
     while (fgets(line, sizeof(line), fp)) {
+        
+        if (count < max || max == -1) {
+
+            count++;
+        }
+        else {
+            break;;
+        }
         // Check if the line was truncated (absence of '\n' in the buffer and not at EOF)
         int n = strlen(line);
         if (line[n - 1] != '\n' && !feof(fp)) {

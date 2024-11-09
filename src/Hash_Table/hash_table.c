@@ -112,7 +112,6 @@ hash_t hash_delete(hash_t table) {
     if (table == NULL) {
         return NULL;
     }
-
     table->data = vect_delete(table->data);
     assert(table->data == NULL);
 

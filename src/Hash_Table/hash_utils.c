@@ -68,7 +68,7 @@ hash_t hash_dico_controler(FILE* fp) {
         return NULL;
     }
 
-    h_tab = add_dico_from_file(fp, (void*)h_tab, (void* (*)(char*, void*))hash_put_wrapper);
+    h_tab = add_dico_from_file(fp, (void*)h_tab, (void* (*)(char*, void*))hash_put_wrapper, -1);
 
     if (h_tab == NULL) {
         ERR("Add_dico_fom_file failed");

@@ -4,6 +4,8 @@
 
 #include "link.h"
 
+#define ERR(msg) fprintf(stderr, "Error in link.c: %s\n", msg)
+
 link_t link_new(void) {
     return NULL;
 }
@@ -148,18 +150,8 @@ link_t link_delete(link_t link, void* (*delete)(void*)) {
     if (link == NULL) {
         return NULL;
     }
-
     while(!link_is_empty(link)) {
 
-        void* p_data = (void*)link->data;
-        link_t p_link = link->next;
-        while (p_link != NULL) {
-            if (p_link->data == p_data) {
-                p_link->data = NULL;
-            }
-            p_link = p_link->next;
-
-        }
         link = link_del_first(link , delete);
 
     }

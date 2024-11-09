@@ -213,6 +213,43 @@ int test_radix_find() {
 }
 
 
+static void generate_random_string(char *str, size_t min_length, size_t max_length) {
+    const char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    size_t charset_size = sizeof(charset) - 1; // Exclude the null terminator
+
+    // Generate a random length between min_length and max_length
+    size_t length = min_length + rand() % (max_length - min_length + 1);
+
+    for (size_t i = 0; i < length; i++) {
+        int key = rand() % charset_size;
+        str[i] = charset[key];
+    }
+    str[length] = '\0'; // Null-terminate the string
+}
+
+static int test_random() {
+
+    fprintf(stderr, "\n## Test of the test_random function\n");
+
+    fprintf(stderr, "<= Test : We try valid parameters, must return not errors\n");
+
+    radix_t radix = radix_new('\0', NULL);
+
+    for (int i = 0; i<100; i++) {
+        char* data = malloc(21* sizeof(char));
+        generate_random_string(data, 10, 20);
+        int rst = radix_add_word(radix, data);
+        free(data);
+        assert(rst == 1);
+    }
+
+    radix = radix_delete(radix);
+    assert(radix == NULL);
+
+    fprintf(stderr, "=> Test passed with success\n");
+    return 1;
+}
+
 
 int main() {
     test_radix_new();
@@ -220,6 +257,7 @@ int main() {
     test_radix_print();
     test_radix_delete();
     test_radix_find();
+    test_random();
 
     fprintf(stderr, "Tests of file 09_tree_patricia.c passed with success\n");
     return EXIT_SUCCESS;

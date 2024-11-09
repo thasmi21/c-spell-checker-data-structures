@@ -182,10 +182,52 @@ int test_trie_compressor() {
     return 1;
 }
 
+static void generate_random_string(char *str, size_t min_length, size_t max_length) {
+    const char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    size_t charset_size = sizeof(charset) - 1; // Exclude the null terminator
+
+    // Generate a random length between min_length and max_length
+    size_t length = min_length + rand() % (max_length - min_length + 1);
+
+    for (size_t i = 0; i < length; i++) {
+        int key = rand() % charset_size;
+        str[i] = charset[key];
+    }
+    str[length] = '\0'; // Null-terminate the string
+}
+
+static int test_random() {
+
+    fprintf(stderr, "\n## Test of the test_random function\n");
+
+    fprintf(stderr, "<= Test : We try valid parameters, must return not errors\n");
+
+    trie_t trie = trie_new();
+    assert(trie != NULL);
+
+    for (int i = 0; i<10000; i++) {
+        char* data = malloc(21* sizeof(char));
+        generate_random_string(data, 10, 20);
+        int rst = trie_add_word(trie, data);
+        assert(rst == 1);
+        free(data);
+    }
+
+    trie_t compressed_trie = trie_compressor(trie);
+    assert(compressed_trie != NULL);
+
+    compressed_trie = trie_compressed_delete(compressed_trie);
+    assert(compressed_trie == NULL);
+
+    fprintf(stderr, "=> Test passed with success\n");
+    return 1;
+}
+
 int main() {
 
     test_add_v_key_chars_trie();
     test_trie_compress();
     test_trie_compressor();
+    test_random();
     EXIT();
 }

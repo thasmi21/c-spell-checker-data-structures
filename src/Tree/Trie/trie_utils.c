@@ -9,6 +9,7 @@
 
 static void* trie_add_word_reverse(char* str, trie_t trie) {
     int rst = trie_add_word(trie, str);
+    free(str);
 
     if (rst <= 0) {
         trie_delete(trie);
@@ -27,7 +28,7 @@ trie_t tree_trie_controler(FILE* fp) {
 
     trie_t trie = trie_new();
 
-    trie = add_dico_from_file(fp, (void*)trie, (void* (*)(char*, void*))trie_add_word_reverse);
+    trie = add_dico_from_file(fp, (void*)trie, (void* (*)(char*, void*))trie_add_word_reverse, -1);
     if (trie == NULL) {
         ERR("Add_dico_fom_file failed");
         return NULL;

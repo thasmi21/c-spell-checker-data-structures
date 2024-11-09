@@ -11,7 +11,7 @@
 static void* patrica_add_word_reverse(char* str, radix_t radix) {
 
     int rst = radix_add_word(radix, str);
-
+    free(str);
     if (rst <= 0) {
         radix_delete(radix);
         return NULL;
@@ -28,9 +28,9 @@ radix_t patrica_compressed_dico_new(FILE* fp) {
         return NULL;
     }
 
-    radix_t radix = NULL;
+    radix_t radix = radix_new('\0', NULL);
 
-    radix = add_dico_from_file(fp, (void*)radix, (void* (*)(char*, void*))patrica_add_word_reverse);
+    radix = add_dico_from_file(fp, (void*)radix, (void* (*)(char*, void*))patrica_add_word_reverse, -1);
     if (radix == NULL) {
         ERR("Add_dico_fom_file failed");
         return NULL;

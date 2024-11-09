@@ -58,6 +58,7 @@ int main(int argc, char* argv[]) {
     // Validate dictionary and function pointers
     if (dico == NULL || dico_find == NULL || dico_delete == NULL) {
         ERR("Dico initialization or function pointers failed");
+        printf("dico = %p, dico_find = %p, dico_delete = %p\n", (void*)dico, dico_find, dico_delete);
         if (dico != NULL) {
             dico = dico_delete(dico);  // Clean up memory in case of error
         }
@@ -78,6 +79,10 @@ int main(int argc, char* argv[]) {
             }
 
             // Call the dictionary find function
+            if (dico_find == NULL) {
+                ERR("dico find = NULL");
+                return -4;
+            }
             if (dico_find(buffer, dico) == 1) {
                 printf("String found in the dictionary: %s\n", buffer);
             } else {

@@ -62,10 +62,37 @@ tests_oracle: $(TESTS_ORACLE_REC)
 tests_oracle/% : tests_oracle/%.o $(OBJ) $(HEADERS)
 	$(CC) $(LDFLAGS) $(word 1, $^) $(OBJ) -o $@ $(LDLIBS)
 
-testDico1H: programs/main
+testDico1H: all programs/main
 	./programs/main ./dico_txt/dico1.txt -h
 
-testVDico1H: programs/main
+testDico1TT: all programs/main
+	./programs/main ./dico_txt/dico1.txt -tt
+
+testDico1TTV: all programs/main
+	valgrind ./programs/main ./dico_txt/dico1.txt -tt
+
+testDico1TP: all programs/main
+	./programs/main ./dico_txt/dico1.txt -tp
+
+testDico1TTP: all programs/main
+	./programs/main ./dico_txt/dico1.txt -ttp
+
+testDico1TTPV: all programs/main
+	valgrind ./programs/main ./dico_txt/dico1.txt -ttp
+
+testDico1TTC: all programs/main
+	./programs/main ./dico_txt/dico1.txt -ttc
+
+testDico1TTCV: all programs/main
+	valgrind ./programs/main ./dico_txt/dico1.txt -ttc
+
+
+
+testDico1TPV: all programs/main
+	valgrind ./programs/main ./dico_txt/dico1.txt -tp
+
+
+testVDico1H: all programs/main
 	valgrind ./programs/main ./dico_txt/dico1.txt -h
 
 

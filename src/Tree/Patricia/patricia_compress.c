@@ -108,14 +108,8 @@ radix_t radix_in_hash_find(radix_t radix, hash_t h_tab) {
         ERR("h_tab is NULL");
         return NULL;
     }
-
+    //radix_print2(radix);
     radix_t radix_bis = (radix_t)tree_in_hash_find((void*)radix, h_tab, (int (*)(void *, vect_t))add_v_key_char);
-
-
-    if (radix_bis == NULL) {
-        ERR("radix_bis = NULL, should not be NULL");
-        return NULL;
-    }
     return radix_bis;
 }
 
@@ -135,7 +129,7 @@ radix_t patricia_compress(radix_t radix, hash_t h_tab) {
         radix->sons = patricia_compress(radix->sons, h_tab);
         if (radix->sons == NULL) {
             ERR("In case,radix->sons != NULL, rst != 1, patricia_compress failed");
-            return radix;
+            return NULL;
         }
     }
 
@@ -143,7 +137,7 @@ radix_t patricia_compress(radix_t radix, hash_t h_tab) {
         radix->brothers = patricia_compress(radix->brothers, h_tab);
         if (radix->brothers == NULL) {
             ERR("In case, radix->brothers != NULL, rst != 1, patricia_compress failed");
-            return radix;
+            return NULL;
         }
     }
 
@@ -152,7 +146,7 @@ radix_t patricia_compress(radix_t radix, hash_t h_tab) {
         int rst = radix_add_in_hash(radix, h_tab);
         if (rst != 1) {
             ERR("In case, radix_bis == NULL, rst != 1, radix_add_in_hash failed");
-            return radix;
+            return NULL;
         }
         return radix;
     }
@@ -162,7 +156,7 @@ radix_t patricia_compress(radix_t radix, hash_t h_tab) {
         radix = patricia_compressed_delete(radix);
         if (radix != NULL) {
             ERR("In case, else, radix != NULL, patricia_compressed_delete failed");
-            return radix;
+            return NULL;
         }
 
         return radix_bis;
@@ -190,8 +184,8 @@ radix_t patricia_compressor(radix_t radix) {
 
     radix_t radix_compressed = (radix_t)tree_compressor((void*)radix, (void* (*)(void*, hash_t))patricia_compress, (void(*)(void*))radix_print2);
     
-    if (radix_compressed != NULL) {
-        ERR("radix_compressed = NULL");
+    if (radix_compressed == NULL) {
+        ERR("radix_compressed == NULL");
         return radix;
     }
 

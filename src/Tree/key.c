@@ -269,8 +269,9 @@ void* tree_compressor(void* tree, void* (*tree_compress)(void*, hash_t), void(*t
         return NULL;
     }
 
-    hash_t h_tab = hash_tree_new(100, tree_print);
-    
+    hash_t h_tab = hash_tree_new(1000, tree_print);
+
+
     if (h_tab == NULL) {
         ERR("hash_tree_new failed");
         return NULL;

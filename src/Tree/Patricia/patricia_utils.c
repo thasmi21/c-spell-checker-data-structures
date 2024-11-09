@@ -11,9 +11,10 @@
 static void* patrica_add_word_reverse(char* str, radix_t radix) {
 
     int rst = radix_add_word(radix, str);
-
+    free(str);
     if (rst <= 0) {
         radix_delete(radix);
+        ERR("rst <= 0");
         return NULL;
     }
     else {
@@ -28,9 +29,9 @@ radix_t tree_patricia_controler(FILE* fp) {
         return NULL;
     }
 
-    radix_t radix = NULL;
+    radix_t radix = radix_new('\0', NULL);
 
-    radix = add_dico_from_file(fp, (void*)radix, (void* (*)(char*, void*))patrica_add_word_reverse);
+    radix = add_dico_from_file(fp, (void*)radix, (void* (*)(char*, void*))patrica_add_word_reverse, -1);
     if (radix == NULL) {
         ERR("Add_dico_fom_file failed");
         return NULL;
@@ -50,8 +51,7 @@ int tree_patricia_find(char* key, radix_t dico) {
         ERR("key failed");
         return -2;
     }
-
-    int rst = tree_patricia_find(key, dico);
+    int rst = radix_find(dico, key);
     if (rst < 0) {
         ERR("tree_patricia_find error");
         return -3;

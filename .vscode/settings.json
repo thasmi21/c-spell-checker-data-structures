@@ -68,6 +68,8 @@
     "initializer_list": "c",
     "utility": "c",
     "cell_wf.h": "c",
-    "dico_utils.h": "c"
+    "dico_utils.h": "c",
+    "13_add_find_tp": "cpp",
+    "limits": "c"
   }
 }

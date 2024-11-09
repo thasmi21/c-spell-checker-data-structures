@@ -11,7 +11,7 @@
 #define SUCCESS()  fprintf(stderr, "=> Test passed with success\n");
 #define EXIT()     fprintf(stderr, "Tests of file %s passed with success\n", __FILE__); return EXIT_SUCCESS;
 
-#define ERR(msg) fprintf(stderr, "Error in 12_add_find_dico.c: %s\n", msg)
+#define ERR(msg) fprintf(stderr, "Error in 12_add_find_hash.c: %s\n", msg)
 
 
 int test_() {
@@ -85,7 +85,6 @@ int test_create_using_dico_hash_table() {
         return -1;
     }
 
-    printf("delete_str = %p\n", delete_str);
     hash_t h_tab = hash_new(10, (size_t (*)(void *))hash_string, (void *(*)(void *))delete_str, (void *(*)(void *))0x1,
     (int (*)(void *, void *))str_compare, (int (*)(void *, void *))0x1, (void (*)(void *))print_str, (void (*)(void *))0x1);
     //0X1 IS FOR USELLESS FUNCTION, BUT NULL IS INVALID (will not code them just for fun, the best code to debug is no code)
@@ -96,26 +95,23 @@ int test_create_using_dico_hash_table() {
     }
 
 
-    h_tab = add_dico_from_file(fp, (void*)h_tab, (void* (*)(char*, void*))hash_put_wrapper);
+    h_tab = add_dico_from_file(fp, (void*)h_tab, (void* (*)(char*, void*))hash_put_wrapper, -1);
     assert(h_tab != NULL);
     if (h_tab == NULL) {
         ERR("Add_dico_fom_file failed");
         return -3;
     }
-
     printf("BEGIN FIND\n");
     char key[] = "a";
     cell_t cell = hash_get_value(key, h_tab);
-    if (cell == NULL) {
+    assert(cell != NULL);
+    printf("END FIND\n");
 
-        return 0;
-    }
-    else {
-        return 1;
-    }
+    printf("BEGIN DELETE\n");
 
-    printf("BEGIN FREE\n");
     h_tab = hash_delete(h_tab);
+    printf("END DELETE\n");
+
     assert(h_tab == NULL);
     fclose(fp);
 

@@ -207,7 +207,6 @@ list_t list_delete(list_t list) {
         printf("Error in list.c/list_delete: list is NULL and size != 0\n");
         exit(EXIT_FAILURE);
     }
-
     list->data = link_delete(list->data, list->delete_data);
     assert(list->data == NULL);
     free(list);

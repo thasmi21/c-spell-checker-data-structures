@@ -46,9 +46,23 @@ int trie_add_word(trie_t trie, char* str) {
     char* p_char = str;
     char c = *p_char;
     while (c != '\0') {
-
         int indice = c - 0x61;
+        if (indice <0 || indice >= 27) {
+            ERR("Invalid char do not add");
+            printf("c = %c in str = %s, code will continue but but adding the modulo char\n", c, str);
+            if (indice < 0) {
+                indice = -indice;
+            }
+            indice = indice%26;
+        }
+
+        if (sons == NULL) {
+            ERR("sons is NULL");
+            return -5;
+        }
+
         if (sons[indice] == NULL) {
+
             sons[indice] = trie_new();
 
             if (sons[indice] == NULL) {
@@ -56,6 +70,7 @@ int trie_add_word(trie_t trie, char* str) {
                 return -4;
             }
         }
+
         p_trie = sons[indice];
         sons = p_trie->sons;
         if (sons == NULL) {
@@ -64,7 +79,9 @@ int trie_add_word(trie_t trie, char* str) {
         }
 
         p_char++;
+
         c = *p_char;
+
     }
 
     if (sons[ASIZE - 1] == NULL) {

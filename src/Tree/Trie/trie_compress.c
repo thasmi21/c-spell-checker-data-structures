@@ -124,9 +124,9 @@ trie_t trie_compressor(trie_t trie) {
 
     trie_t trie_compressed = (trie_t)tree_compressor((void*)trie, (void* (*)(void*, hash_t))trie_compress, (void(*)(void*))trie_print2);
     
-    if (trie_compressed != NULL) {
+    if (trie_compressed == NULL) {
         ERR("trie_compressed = NULL");
-        return trie;
+        return NULL;
     }
 
     return trie_compressed;

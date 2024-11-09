@@ -301,7 +301,6 @@ static int test_table_initialize_i() {
     double* p3;
     p3 = malloc(sizeof(double));
     *p3 = 78;
-    table_append(p3, tab);
 
     table_initialize_i(tab, 3, p3);
 
