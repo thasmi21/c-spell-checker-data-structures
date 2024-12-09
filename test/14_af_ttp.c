@@ -90,7 +90,7 @@ int test_create_using_dico_tp_table() {
         return -3;
     }
 
-    printf("BEGIN COMPRESS");
+    printf("BEGIN COMPRESS\n");
     radix = patricia_compressor(radix);
     if (radix == NULL) {
         ERR("radix_compressor failed");

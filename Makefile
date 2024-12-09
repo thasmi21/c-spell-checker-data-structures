@@ -95,6 +95,9 @@ testDico1TPV: all programs/main
 testVDico1H: all programs/main
 	valgrind ./programs/main ./dico_txt/dico1.txt -h
 
+testTempsPerdu: all programs/main_livre
+	./programs/main_livre ./dico_txt/dico1.txt -h ./livre_txt/a_la_recherche_du_temps_perdu.txt
+
 
 help :
 	@echo ''

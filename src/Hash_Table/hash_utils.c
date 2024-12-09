@@ -90,9 +90,7 @@ int hash_dico_find(char* key, hash_t dico) {
     }
 
     cell_t cell = hash_get_value(key, dico);
-    printf("lol\n");
     if (cell == NULL) {
-            printf("lolEchec\n");
 
         return 0;
     }
